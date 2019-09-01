@@ -1,0 +1,132 @@
+body {
+    background-color: #f8f9fa !important;
+    overflow: hidden; /* Default action */
+}
+
+div.container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+div.contents {
+    margin-top: 20px;
+    background-color: white;
+
+    border: 1px solid rgba(0, 0, 0, .125);
+    border-radius: .25rem;
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
+}
+
+svg#logo {
+    overflow: visible;
+}
+
+div#toolbar {
+    background-color: #f1f1f1;
+    padding: 15px;
+    border-right: 1px solid rgba(0, 0, 0, .125);
+}
+
+div#preview {
+    overflow: hidden;
+    padding: 0;
+    outline: none;
+    cursor: crosshair;
+}
+
+div#advanced {
+    background-color: #f1f1f1;
+    border-top: 1px solid rgba(0, 0, 0, .125);
+    padding: 15px;
+}
+
+div.row {
+    margin: 0;
+}
+
+input#file {
+    position: absolute;
+    font-size: 50px;
+    opacity: 0;
+    right: 0;
+    top: 0;
+}
+
+div.file-button {
+    position: relative;
+    overflow: hidden;
+}
+
+.button-zoom {
+    position: absolute;
+}
+
+#zoom-plus {
+    top: 10px;
+    right: 10px;
+}
+
+#zoom-reset {
+    top: 55px;
+    right: 10px;
+}
+
+#zoom-minus {
+    top: 100px;
+    right: 10px;
+}
+
+#tip {
+    position: absolute;
+    white-space: nowrap;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+div#map {
+    height: 100px; /* FIXME */
+}
+
+.bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+    width:180px;
+    left: 0;
+    /* position: absolute; */ /* This is being removed */
+}
+
+#overlay {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    background-color: rgb(255, 255, 255); /* Black fallback color */
+    background-color: rgba(255, 255, 255, 0.9);
+
+    visibility: visible;
+    opacity: 1;
+}
+
+#overlay.overlay-hidden {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.2s, opacity 0.2s linear;
+}
+
+#loading {
+    position: absolute;
+    text-align: center;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+#gradient-preview {
+    width: 100%;
+    height: 30px;
+    background-color: white;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+}

@@ -1,0 +1,15 @@
+/*path {
+    stroke: none;
+    fill: none;
+}*/
+
+/* TODO remove */
+path.debug {
+    stroke-width: 0.01px;
+    stroke: red;
+    fill: none;
+}
+
+svg#fan {
+
+}
