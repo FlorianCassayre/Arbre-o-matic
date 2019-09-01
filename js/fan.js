@@ -279,7 +279,7 @@ function drawFan(json, config) {
         return;
     }
 
-    const radius = 400;
+    const radius = Math.round(config.dimensions / 2);
 
 
     function max(a, b) {
@@ -451,14 +451,14 @@ function drawFan(json, config) {
     const scale = radius / totalWeight;
     const marginScale = 0.95;
 
+    const defs = svg.append('defs');
+
     const center = svg.append('g')
         .attr('transform', 'translate(' + (width / 2) * (1 - marginScale) + ',' + (height / 2) * (1 - marginScale) + ') scale(' + marginScale + ', ' + marginScale + ')');
 
     const g = center.append('g')
         .attr('transform', 'translate(' + (width / 2) + ', ' + radius + ')' + ' scale(' + scale + ', ' + scale + ')');
     // FIXME scale margin != absolute margin
-
-    const defs = g.append('defs');
 
     // --
 

@@ -39,6 +39,8 @@ let json = null;
 
 let previousColoring = null;
 
+let previousDimensions = null;
+
 function onFileChange(data) {
     json = toJson(data);
 
@@ -146,6 +148,7 @@ function onSettingChange() {
         onColoringChange(coloringScheme); // Reset default colors, display menu according to scheme
     }
     previousColoring = coloring;
+    const dimensions = parseInt($('#size-pixels').val());
 
     const config = {
         root: individualSelect.val(), // Root individual
@@ -186,10 +189,16 @@ function onSettingChange() {
             saturation: parseInt($('#saturation').val()) / 100.0,
             value: parseInt($('#value').val()) / 100.0,
             randomSelection: $('#random-selection').prop('checked')
-        }
+        },
+        dimensions: dimensions
     };
 
     drawFan(json, config);
+
+    if(dimensions !== previousDimensions) {
+        previousDimensions = dimensions;
+        resetZoom();
+    }
 }
 
 function onColoringChange(scheme) {
@@ -350,25 +359,50 @@ $("#download-svg").click(function () {
     return false;
 });
 
-$("#download-png").click(function () {
-    const canvas = document.createElement("canvas"),
-        context = canvas.getContext("2d");
-
-    const size = 800;
-
-    canvas.width = size;
-    canvas.height = size;
-
-    context.fillStyle = 'white';
-    context.rect(0, 0, canvas.width, canvas.height);
-    context.fill();
-
-    const data = fanAsXml();
-
-    // TODO
-
+$("#download-png-transparency").click(function () {
+    downloadPNG(true);
     return false;
 });
+
+$("#download-png-background").click(function () {
+    downloadPNG(false);
+    return false;
+});
+
+function downloadPNG(transparency) {
+    const svgString = fanAsXml();
+    const canvas = document.createElement("canvas");
+    const fan = $("#fan");
+
+    canvas.width = parseInt(fan.width());
+    canvas.height = parseInt(fan.height());
+    const ctx = canvas.getContext("2d");
+
+    if(!transparency) { // No transparency
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    const DOMURL = self.URL || self.webkitURL || self;
+    const img = new Image();
+    const svg = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
+    const url = DOMURL.createObjectURL(svg);
+
+    img.onload = function() {
+        ctx.drawImage(img, 0, 0);
+
+        canvas.toBlob(function(blob) {
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "Généalogie.png";
+            document.body.appendChild(a);
+            a.click();
+        });
+    };
+    img.src = url;
+}
 
 $("#print").click(function () {
     function printPdf(url) {
