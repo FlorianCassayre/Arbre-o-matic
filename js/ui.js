@@ -309,6 +309,7 @@ function fanAsXml() {
     if (!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)) {
         source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
     }
+    source = source.replace(/href/g, 'xlink:href'); // Compatibility
 
     source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
 
