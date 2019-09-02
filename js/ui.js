@@ -119,18 +119,28 @@ const coloringSchemes = {
     none: {type: COLORING_NONE},
     sex: {type: COLORING_DUAL, f: (d => d.sex), color1: '#e0f4ff', color2: '#ffe0eb'},
     generation: {type: COLORING_GRADIENT, f: (d => d.generation), colorStart: '#FBC79F', colorEnd: '#CEFFCE'},
-    age: {type: COLORING_GRADIENT, f: (d => {
+    agedeath: {type: COLORING_GRADIENT, f: (d => {
         if(!d.birth || !d.birth.date || !d.birth.date.year)
             return null;
-        if(!d.death || !d.death.date || !d.death.date.year) // TODO living people
+        if(!d.death || !d.death.date || !d.death.date.year)
                 return null;
         return d.death.date.year - d.birth.date.year;
         }), colorStart: '#F9B4B4', colorEnd: '#BAFCFF'},
+    agemarriage: {type: COLORING_GRADIENT, f: (d => {
+            if(!d.birth || !d.birth.date || !d.birth.date.year)
+                return null;
+            const parent = d.parent();
+            if(parent === null || !parent.marriage || !parent.marriage.date || !parent.marriage.date.year)
+                return null;
+            return parent.marriage.date.year - d.birth.date.year;
+        }), colorStart: '#8EF389', colorEnd: '#D5B4F9'},
     birthdate: {type: COLORING_GRADIENT, f: (d => d.birth && d.birth.date && d.birth.date.year ? d.birth.date.year : null), colorStart: '#565756', colorEnd: '#BAFCFF'},
     birthtown: {type: COLORING_TEXTUAL, f: (d => d.birth && d.birth.place && d.birth.place.town ? d.birth.place.town : null)},
     birthdepartement: {type: COLORING_TEXTUAL, f: (d => d.birth && d.birth.place && d.birth.place.departement ? d.birth.place.departement : null)},
     patronym: {type: COLORING_TEXTUAL, f: (d => d.surname)},
     signature: {type: COLORING_DUAL, f: (d => d.canSign), color1: '#83FBBC', color2: '#C8C8C8'},
+    occupation: {type: COLORING_TEXTUAL, f: (d => d.occupation)},
+    childrencount: {type: COLORING_GRADIENT, f: (d => d.childrenCount), colorStart: '#BAFCFF', colorEnd: '#F9B4B4'},
 };
 
 function colorValue(id) {
@@ -190,7 +200,9 @@ function onSettingChange() {
             value: parseInt($('#value').val()) / 100.0,
             randomSelection: $('#random-selection').prop('checked')
         },
-        dimensions: dimensions
+        dimensions: dimensions,
+
+        computeChildrenCount: coloring === 'childrencount',
     };
 
     drawFan(json, config);

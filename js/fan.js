@@ -1,12 +1,14 @@
 const EMPTY = "";
 const TAG_HEAD = "HEAD", TAG_ENCODING = "CHAR", TAG_FORMAT = "FORM", TAG_INDIVIDUAL = "INDI", TAG_FAMILY = "FAM", TAG_CHILD = "CHIL", TAG_HUSBAND = "HUSB", TAG_WIFE = "WIFE",
     TAG_NAME = "NAME", TAG_GIVEN_NAME = "GIVN", TAG_SURNAME = "SURN", TAG_BIRTH = "BIRT", TAG_DEATH = "DEAT", TAG_SEX = "SEX",
-    TAG_DATE = "DATE", TAG_PLACE = "PLAC", TAG_MARRIAGE = "MARR", TAG_SIGNATURE = "SIGN";
+    TAG_DATE = "DATE", TAG_PLACE = "PLAC", TAG_MARRIAGE = "MARR", TAG_SIGNATURE = "SIGN", TAG_EVENT = "EVEN", TAG_TYPE = "TYPE", TAG_NOTE = "NOTE", TAG_OCCUPATION = "OCCU";
 const TAG_YES = "YES", TAG_ANSI = "ANSI";
 const TAG_ABOUT = 'ABT', TAG_BEFORE = 'BEF', TAG_AFTER = 'AFT';
 const TAG_GREGORIAN = '@#DGREGORIAN@', TAG_REPUBLICAN = '@#DFRENCH R@';
 const TAGS_MONTH = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 const TAGS_MONTH_REPUBLICAN = ['VEND', 'BRUM', 'FRIM', 'NIVO', 'PLUV', 'VENT', 'GERM', 'FLOR', 'PRAI', 'MESS', 'THER', 'FRUC', 'COMP'];
+
+const VALUE_OCCUPATION = "Occupation";
 
 const republicanConversion = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII'];
 
@@ -66,6 +68,11 @@ function buildIndividual(json, config) {
         surname = getFirst(names.flatMap(a => a.tree.filter(byTag(TAG_SURNAME)).map(o => o.data)), EMPTY).replace(/_/, ' ');
     const sex = getFirst(json.tree.filter(byTag(TAG_SEX)).map(s => s.data === 'M'), null);
     const canSign = getFirst(json.tree.filter(byTag(TAG_SIGNATURE)).map(s => s.data === TAG_YES), null);
+    const occupations = json.tree.filter(byTag(TAG_OCCUPATION)).map(d => d.data);
+    const occupationsOld = json.tree.filter(byTag(TAG_EVENT)).map(e => e.tree).filter(e => e.filter(byTag(TAG_TYPE))
+        .some(e => e.data === VALUE_OCCUPATION)).flatMap(e => e.filter(byTag(TAG_NOTE)).map(n => n.data));
+
+    const firstOccupation = getFirst(occupations.concat(occupationsOld), null);
 
     if(!name || !surname) { // Use NAME instead (compatibility with old software)
         names.map(o => {
@@ -80,7 +87,7 @@ function buildIndividual(json, config) {
     const birthData = buildEvent(getFirst(json.tree.filter(byTag(TAG_BIRTH)), null), config),
         deathData = buildEvent(getFirst(json.tree.filter(byTag(TAG_DEATH)), null), config);
 
-    return {id: json.pointer, name: name, surname: surname, birth: birthData, death: deathData, sex: sex, canSign: canSign};
+    return {id: json.pointer, name: name, surname: surname, birth: birthData, death: deathData, sex: sex, canSign: canSign, occupation: firstOccupation};
 }
 
 function buildEvent(event, config) {
@@ -233,17 +240,23 @@ function buildHierarchy(json, config) {
 
     const maxHeight = config.maxGenerations - 1;
 
-    function buildRecursive(individual, sosa, height) {
+    function buildRecursive(individual, parent, sosa, height) {
 
         let obj = buildIndividual(individual, config);
         obj.sosa = sosa;
         obj.generation = height;
 
+        if(config.computeChildrenCount) { // On-demand property
+            const forTag = obj.sex === null ? null : (obj.sex ? TAG_HUSBAND : TAG_WIFE);
+            const familiesAsParent = families.filter(f => f.tree.some(t => t.tag === forTag && t.data === individual.pointer)).flatMap(f => f.tree.filter(byTag(TAG_CHILD)));
+            obj.childrenCount = familiesAsParent.length;
+        }
+
         if (height < maxHeight) {
             const familyA = individual != null ? families.filter(byChild(individual)) : [];
 
             if(familyA.length === 0 && config.showMissing) {
-                obj.children = [buildRecursive(null, sosa * 2, height + 1), buildRecursive(null, sosa * 2 + 1, height + 1)];
+                obj.children = [buildRecursive(null, obj, sosa * 2, height + 1), buildRecursive(null, obj, sosa * 2 + 1, height + 1)];
                 obj.marriage = {};
             } else if(familyA.length > 0) {
                 const family = familyA[0];
@@ -255,8 +268,8 @@ function buildHierarchy(json, config) {
 
                 const husbandA = getParent(TAG_HUSBAND), wifeA = getParent(TAG_WIFE);
 
-                const parents = (husbandA.map(h => buildRecursive(h, sosa * 2, height + 1)))
-                    .concat(wifeA.map(w => buildRecursive(w, sosa * 2 + 1, height + 1)));
+                const parents = (husbandA.map(h => buildRecursive(h, obj, sosa * 2, height + 1)))
+                    .concat(wifeA.map(w => buildRecursive(w, obj, sosa * 2 + 1, height + 1)));
 
                 if (parents.length > 0) {
                     obj.children = parents;
@@ -265,10 +278,13 @@ function buildHierarchy(json, config) {
                 }
             }
         }
+
+        obj.parent = _ => parent;
+
         return obj;
     }
 
-    return buildRecursive(rootIndividual, 1, 0);
+    return buildRecursive(rootIndividual, null, 1, 0);
 }
 
 function drawFan(json, config) {
