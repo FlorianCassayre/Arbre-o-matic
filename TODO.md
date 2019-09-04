@@ -1,7 +1,5 @@
 ## À faire
 
-- Ajouter une favicon
-- Ajouter des icônes pour les appareils Apple
 - Utiliser un gestionnaire de dépendances
 - Ajouter d'autres paramètres d'affichage de lieu
 - Corriger le bouton individu qui ne remplit pas l'espace comme devrait le faire un élément `col-12`
