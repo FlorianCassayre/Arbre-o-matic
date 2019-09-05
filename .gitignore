@@ -1,4 +1,6 @@
 .idea
 *.iml
-other/
 test.ged
+npm-debug.log*
+dist/
+node_modules/
