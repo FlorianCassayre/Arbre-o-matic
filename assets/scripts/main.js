@@ -11,5 +11,4 @@ import './vendor/panzoom'
 import './vendor/seedrandom'
 import './vendor/parse-gedcom'
 
-import './fan'
 import './ui'

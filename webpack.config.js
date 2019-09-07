@@ -1,6 +1,32 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const StringReplacePlugin = require("string-replace-webpack-plugin");
+
+
+const babelConf = {
+    loader: 'babel-loader',
+    options: {
+        presets: [
+            [
+                "@babel/preset-env",
+                {
+                    targets: {
+                        "ie": "11"
+                    },
+                    modules: false,
+                    useBuiltIns: 'usage',
+                    corejs: "core-js@2",
+                    loose: true
+                }
+            ]
+        ],
+        sourceType: "unambiguous",
+        ignore: [
+            /\/core-js/,
+        ]
+    }
+};
 
 module.exports = {
     entry: './assets/index.js',
@@ -21,6 +47,18 @@ module.exports = {
     },
     module: {
         rules: [
+            {
+                enforce: 'pre',
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: babelConf
+            },
+            {
+                test: /\.js$/,
+                include: /(pdfkit|saslprep|unicode-trie|unicode-properties|dfa|linebreak|panzoom)/,
+                use: babelConf
+            },
+
             {enforce: 'post', test: /fontkit[/\\]index.js$/, loader: "transform-loader?brfs"},
             {enforce: 'post', test: /unicode-properties[/\\]index.js$/, loader: "transform-loader?brfs"},
             {enforce: 'post', test: /linebreak[/\\]src[/\\]linebreaker.js/, loader: "transform-loader?brfs"},
@@ -31,10 +69,8 @@ module.exports = {
                 test: /\.(html)$/,
                 loader: 'html-loader',
                 options: {
-                    // Interpolation syntax for ES6 template strings
-                    interpolate: true,
-                    // Disable minifcation during production mode
-                    minimize: false,
+                    interpolate: true, // Interpolation syntax for ES6 template strings
+                    minimize: false, // Disable minifcation during production mode
                 },
                 exclude: /node_modules/,
             },
@@ -75,18 +111,7 @@ module.exports = {
                 ],
                 exclude: /node_modules/,
             },
-            {
-                enforce: 'pre', // checked before being processed by babel-loader
-                test: /\.(js)$/,
-                loader: 'eslint-loader',
-                exclude: /node_modules/,
 
-            },
-            {
-                test: /\.(js)$/,
-                loader: 'babel-loader',
-                exclude: /node_modules/,
-            },
             {
                 test: /\.(jpe?g|png|gif|svg)$/,
                 use: [
@@ -119,6 +144,7 @@ module.exports = {
                 exclude: /node_modules/,
             },
             {
+                type: 'javascript/auto', // Fix for *.json files
                 test: /(favicon\.ico|site\.webmanifest|manifest\.json|browserconfig\.xml|robots\.txt|humans\.txt)$/,
                 loader: 'file-loader',
                 options: {
@@ -135,10 +161,23 @@ module.exports = {
                 },
                 exclude: /node_modules/,
             },
+
+            {
+                test: /\.js$/,
+                loader: StringReplacePlugin.replace({ // Hard patch for `trimLeft`
+                    replacements: [
+                        {
+                            pattern: /trimLeft\(\)/ig,
+                            replacement: function (match, p1, offset, string) {
+                                return 'trim()';
+                            }
+                        }
+                    ]
+                })
+            }
         ],
     },
-    // DevServer
-    // https://webpack.js.org/configuration/dev-server/
+
     devServer: {
         contentBase: path.join(__dirname, 'dist'),
         compress: true,
@@ -153,5 +192,6 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: './css/styles.css'
         }),
+        new StringReplacePlugin()
     ]
 };
