@@ -1,11 +1,13 @@
 body {
   background-color: #f8f9fa !important;
   overflow: hidden; /* Default action */
+  min-width: 992px;
 }
 
 div.container {
   margin-top: 20px;
   margin-bottom: 20px;
+  min-width: 962px;
 }
 
 div.contents {
