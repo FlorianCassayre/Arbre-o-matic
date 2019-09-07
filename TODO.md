@@ -1,7 +1,8 @@
 ## À faire
 
-- Utiliser un gestionnaire de dépendances
 - Afficher un message lorsqu'aucun aperçu n'est affiché
+- Améliorer l'affichage sur mobile (plusieurs problèmes rapportés)
+- Améliorer le système de détection d'erreur et afficher un composant "alert" bootstrap
 - Ajouter d'autres paramètres d'affichage de lieu
 - Corriger le bouton individu qui ne remplit pas l'espace comme devrait le faire un élément `col-12`
 - Ajouter un lecteur de fichier CSV pour définir une palette de couleurs personnalisée
