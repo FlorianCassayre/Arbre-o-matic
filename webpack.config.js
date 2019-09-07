@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const StringReplacePlugin = require("string-replace-webpack-plugin");
 
+const isProduction = process.env.NODE_ENV === 'production';
 
 const babelConf = {
     loader: 'babel-loader',
@@ -35,7 +36,7 @@ module.exports = {
         filename: './js/index.bundle.js',
     },
     // Generate sourcemaps for proper error messages
-    devtool: 'source-map',
+    devtool: isProduction ? undefined : 'source-map',
     performance: {
         // Turn off size warnings for entry points
         hints: false,
