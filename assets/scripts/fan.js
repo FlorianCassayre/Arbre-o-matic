@@ -471,6 +471,7 @@ function drawFan(json, config) {
             const l = lines[i];
             anchor.append('text')
                 .attr('dominant-baseline', 'middle')
+                .attr('alignment-baseline', 'middle')
                 .append('textPath')
                 .attr('font-size', l.size + "px")
                 .attr('font-weight', l.hasOwnProperty('bold') && l.bold ? "bold" : "")
