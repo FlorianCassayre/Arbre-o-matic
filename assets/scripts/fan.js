@@ -512,7 +512,7 @@ function drawFan(json, config) {
         if((!d.data.death.date || !d.data.death.date.display) && (!d.data.death.place || !d.data.death.place.display))
             return '';
         else
-            return '✝' + (d.data.death.date.display ? d.data.death.date.display : '') + (config.places.showPlaces && d.data.death.place && d.data.death.place.display ? ' ' + d.data.death.place.display : '');
+            return '+' + (d.data.death.date.display ? d.data.death.date.display : '') + (config.places.showPlaces && d.data.death.place && d.data.death.place.display ? ' ' + d.data.death.place.display : '');
     }
 
     function textRange(d) {
