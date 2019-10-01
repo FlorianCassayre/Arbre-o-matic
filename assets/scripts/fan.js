@@ -8,7 +8,7 @@ const Utils = require('./utils');
 function drawFan(json, config) {
 
     const data = Parse.buildHierarchy(json, config);
-    if(data === null) {
+    if(data == null) {
         window.alert("Impossible d'interpréter ce fichier");
         return;
     }
@@ -195,7 +195,6 @@ function drawFan(json, config) {
     // FIXME scale margin != absolute margin
 
     // --
-
     function hslToRgb(h, s, l){
         var r, g, b;
 
@@ -229,7 +228,8 @@ function drawFan(json, config) {
         dataToColor = [];
         function forEach(tree) {
             const result = colorScheme.f(tree);
-            if(result !== null) {
+
+            if(result != null) {
                 if(!set.has(result))
                     dataToColor.push(result);
                 set.add(result);
@@ -261,7 +261,7 @@ function drawFan(json, config) {
                 return b !== a ? (v - a) / (b - a) : (a + b) / 2.0;
             }
             coloringFunction = function (d) {
-                if(d === null)
+                if(d == null || d.length === 0)
                     return individualsDefaultColorRgb;
                 const array = [];
                 for(let i = 0; i < 3; i++) {
@@ -275,7 +275,7 @@ function drawFan(json, config) {
                 indexMap[dataToColor[i]] = i;
             }
             coloringFunction = function (d) {
-                if(d === null)
+                if(d == null || d.length === 0)
                     return individualsDefaultColorRgb;
                 const hue = indexMap[d] / dataToColor.length;
                 return hslToRgb(hue, config.colors.saturation, config.colors.value);
@@ -288,8 +288,8 @@ function drawFan(json, config) {
             return individualsDefaultColorRgb;
         } else if(colorScheme.type === 'dual') {
             const result = colorScheme.f(d.data);
-            if(result !== null)
-                return hexToRgb(result ? config.colors.color1 : config.colors.color2);
+            if(result != null) {
+                return hexToRgb(result ? config.colors.color1 : config.colors.color2);}
             else
                 return individualsDefaultColorRgb;
         } else if(colorScheme.type === 'gradient') {

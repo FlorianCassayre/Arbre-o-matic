@@ -37,7 +37,7 @@ function getFirst(array, def) {
 }
 
 function buildIndividual(json, config) {
-    if(json === null) {
+    if(json == null) {
         const dummyEvent = {};
         return {id: null, name: '', surname: '', birth: dummyEvent, death: dummyEvent};
     }
@@ -222,11 +222,14 @@ function buildHierarchy(json, config) {
         let obj = buildIndividual(individual, config);
         obj.sosa = sosa;
         obj.generation = height;
+        if(individual == null) { // Special case: placeholder individuals
+            obj.sex = sosa % 2 === 0;
+        }
 
         if(config.computeChildrenCount) { // On-demand property
-            const forTag = obj.sex === null ? null : (obj.sex ? TAG_HUSBAND : TAG_WIFE);
-            const familiesAsParent = families.filter(f => f.tree.some(t => t.tag === forTag && t.data === individual.pointer)).flatMap(f => f.tree.filter(byTag(TAG_CHILD)));
-            obj.childrenCount = familiesAsParent.length;
+            const forTag = obj.sex == null ? null : (obj.sex ? TAG_HUSBAND : TAG_WIFE);
+            const familiesAsParent = families.filter(f => f.tree.some(t => t.tag === forTag && individual != null && t.data === individual.pointer)).flatMap(f => f.tree.filter(byTag(TAG_CHILD)));
+            obj.childrenCount = individual != null ? familiesAsParent.length : null;
         }
 
         if (height < maxHeight) {

@@ -141,7 +141,7 @@ const coloringSchemes = {
         if(!d.birth || !d.birth.date || !d.birth.date.year)
             return null;
         const parent = d.parent();
-        if(parent === null || !parent.marriage || !parent.marriage.date || !parent.marriage.date.year)
+        if(parent == null || !parent.marriage || !parent.marriage.date || !parent.marriage.date.year)
             return null;
         return parent.marriage.date.year - d.birth.date.year;
     }), colorStart: '#8EF389', colorEnd: '#D5B4F9'},
@@ -227,7 +227,7 @@ function onSettingChange() {
 function onColoringChange(scheme) {
     $('.group-color').css('display', 'none'); // Hide all
     // Show only one
-    if(scheme === null)
+    if(scheme == null)
         return;
     if(scheme.type === COLORING_DUAL) {
         $('#group-color-dual').css('display', '');
@@ -520,7 +520,7 @@ $(function () {
             fallbackColor: '#ffffff'
         })
         .on('colorpickerHide', function () {
-            if(json !== null) {
+            if(json != null) {
                 onSettingChange();
             }
         })
