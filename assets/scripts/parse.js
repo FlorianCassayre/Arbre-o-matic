@@ -269,13 +269,16 @@ function buildHierarchy(json, config) {
 
 function toJson(data) {
 
+    const triggers = "[鬩]"; // é
+
     const view = new Uint8Array(data);
     const text = Utf8ArrayToStr(view);
     const parsed = parseGedcom.parse(text);
 
+    const isLikelyAnsi = (new RegExp(triggers)).test(text);
     const isAnsi = getFirst(parsed.filter(byTag(TAG_HEAD)).flatMap(a => a.tree.filter(byTag(TAG_ENCODING)).map(a => a.data)), null) === TAG_ANSI;
 
-    if(isAnsi) { // Conversion and reparsing needed
+    if(isLikelyAnsi || isAnsi) { // Conversion and reparsing needed
         console.log("ANSI detected, converting");
         const extendedAsciiTable = "€?‚ƒ„…†‡ˆ‰Š‹Œ?Ž??‘’“”•–—˜™š›œ?žŸ?¡¢£¤¥¦§¨©ª«¬?®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ"; // Let's hope this doesn't cause issues with IDEs
         const builder = [];
