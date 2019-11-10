@@ -4,7 +4,7 @@ const Utils = require('./utils');
 
 const EMPTY = "";
 const TAG_HEAD = "HEAD", TAG_ENCODING = "CHAR", TAG_FORMAT = "FORM", TAG_INDIVIDUAL = "INDI", TAG_FAMILY = "FAM", TAG_CHILD = "CHIL", TAG_HUSBAND = "HUSB", TAG_WIFE = "WIFE",
-    TAG_NAME = "NAME", TAG_GIVEN_NAME = "GIVN", TAG_SURNAME = "SURN", TAG_BIRTH = "BIRT", TAG_DEATH = "DEAT", TAG_SEX = "SEX",
+    TAG_NAME = "NAME", TAG_GIVEN_NAME = "GIVN", TAG_SURNAME = "SURN", TAG_BIRTH = "BIRT", TAG_BAPTISM = "CHR", TAG_DEATH = "DEAT", TAG_BURIAL = "BURI", TAG_SEX = "SEX",
     TAG_DATE = "DATE", TAG_PLACE = "PLAC", TAG_MARRIAGE = "MARR", TAG_SIGNATURE = "SIGN", TAG_EVENT = "EVEN", TAG_TYPE = "TYPE", TAG_NOTE = "NOTE", TAG_OCCUPATION = "OCCU";
 const TAG_YES = "YES", TAG_ANSI = "ANSI";
 const TAG_ABOUT = 'ABT', TAG_BEFORE = 'BEF', TAG_AFTER = 'AFT';
@@ -63,8 +63,27 @@ function buildIndividual(json, config) {
         })
     }
 
-    const birthData = buildEvent(getFirst(json.tree.filter(byTag(TAG_BIRTH)), null), config),
-        deathData = buildEvent(getFirst(json.tree.filter(byTag(TAG_DEATH)), null), config);
+    let birthTags = [TAG_BIRTH], deathTags = [TAG_DEATH];
+    const birthTagsExt = [TAG_BAPTISM], deathTagsExt = [TAG_BURIAL];
+
+    if(config.substituteEvents) {
+        birthTags = birthTags.concat(birthTagsExt);
+        deathTags = deathTags.concat(deathTagsExt);
+    }
+
+    function buildEventFallback(tags) {
+        let first = null;
+        for(let i = 0; i < tags.length; i++) {
+            const tag = tags[i];
+            first = getFirst(json.tree.filter(byTag(tag)), null);
+            if(first !== null) {
+                break;
+            }
+        }
+        return buildEvent(first, config);
+    }
+
+    const birthData = buildEventFallback(birthTags), deathData = buildEventFallback(deathTags);
 
     return {id: json.pointer, name: name, surname: surname, birth: birthData, death: deathData, sex: sex, canSign: canSign, occupation: firstOccupation};
 }

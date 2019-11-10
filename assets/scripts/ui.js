@@ -196,6 +196,7 @@ function onSettingChange() {
         showMissing: $('#show-missing').prop('checked'),
         givenThenFamilyName: parseInt($('#select-name-order').val()) === 0,
         showFirstNameOnly: parseInt($('#select-name-display').val()) === 1,
+        substituteEvents: $('#substitute-events').prop('checked'),
         invertTextArc: $('#invert-text-arc').prop('checked'),
         isTimeVisualisationEnabled: $('#show-chronology').prop('checked'),
         weights: {
