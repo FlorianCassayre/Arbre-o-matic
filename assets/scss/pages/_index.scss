@@ -132,3 +132,14 @@ div#map {
   border: 1px solid #ced4da;
   border-radius: .25rem;
 }
+
+#tip.tip-hidden {
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transition: visibility 0.2s linear,
+  opacity 0.2s linear;
+  -moz-transition: visibility 0.2s linear,
+  opacity 0.2s linear;
+  -o-transition: visibility 0.2s linear,
+  opacity 0.2s linear;
+}

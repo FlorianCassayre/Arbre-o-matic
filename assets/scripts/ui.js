@@ -101,6 +101,15 @@ function onFileChange(data) {
 
     map = panzoom(document.querySelector('#map'));
 
+    let first = true;
+    map.on('transform', function(e) {
+        if(first) {
+            first = false;
+        } else {
+            $('#tip').addClass('tip-hidden'); // User has already interacted with the preview, hint tooltip is not needed anymore
+        }
+    });
+
     resetZoom();
 
 }
