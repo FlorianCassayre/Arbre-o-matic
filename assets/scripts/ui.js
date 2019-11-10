@@ -185,6 +185,8 @@ function onSettingChange() {
         },
         showMarriages: $('#show-marriages').prop('checked'),
         showMissing: $('#show-missing').prop('checked'),
+        givenThenFamilyName: parseInt($('#select-name-order').val()) === 0,
+        showFirstNameOnly: parseInt($('#select-name-display').val()) === 1,
         invertTextArc: $('#invert-text-arc').prop('checked'),
         isTimeVisualisationEnabled: $('#show-chronology').prop('checked'),
         weights: {

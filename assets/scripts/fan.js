@@ -525,46 +525,63 @@ function drawFan(json, config) {
         return s;
     }
 
+    function givenName(d) {
+        const full = d.data.name;
+        if(config.showFirstNameOnly) {
+            return full.split(/\s+/)[0];
+        } else {
+            return full;
+        }
+    }
+
+    function nameFirst(d) {
+        return config.givenThenFamilyName ? givenName(d) : d.data.surname;
+    }
+
+    function nameSecond(d) {
+        return config.givenThenFamilyName ? d.data.surname : givenName(d);
+    }
+
     // First individual
     generateTexts(isFirstLayer, [
-        {text: d => d.data.name, size: weightFontFirst, bold: true},
-        {text: d => d.data.surname, size: weightFontFirst, bold: true},
+        {text: nameFirst, size: weightFontFirst, bold: true},
+        {text: nameSecond, size: weightFontFirst, bold: true},
         {text: textBirth, size: weightFontFirst},
         {text: textDeath, size: weightFontFirst}
     ], "middle", false);
 
     // Secondary individuals
     generateTexts(isSecondLayer, [
-        {text: d => d.data.name, size: weightFontOther, bold: true},
-        {text: d => d.data.surname, size: weightFontOther, bold: true},
+        {text: nameFirst, size: weightFontOther, bold: true},
+        {text: nameSecond, size: weightFontOther, bold: true},
         {text: textBirth, size: weightFontOther},
         {text: textDeath, size: weightFontOther}
     ], "middle", false);
 
     // Third individuals
     generateTexts(isThirdLayer, [
-        {text: d => d.data.name, size: weightFontOther, bold: true},
-        {text: d => d.data.surname, size: weightFontOther, bold: true},
+        {text: nameFirst, size: weightFontOther, bold: true},
+        {text: nameSecond, size: weightFontOther, bold: true},
         {text: textBirth, size: weightFontOther},
         {text: textDeath, size: weightFontOther}
     ], "middle", false);
 
     // Fourth individuals
     generateTexts(isFourthLayer, [
-        {text: d => d.data.name, size: weightFontOther, bold: true},
-        {text: d => d.data.surname, size: weightFontOther, bold: true},
+        {text: nameFirst, size: weightFontOther, bold: true},
+        {text: nameSecond, size: weightFontOther, bold: true},
         {text: textRange, size: weightFontOther},
     ], "middle", false);
 
     // Fourth individuals
     generateTexts(isFifthLayer, [
-        {text: d => d.data.name + ' ' + d.data.surname, size: weightFontOther, bold: true},
+        {text: d => nameFirst(d) + ' ' + nameSecond(d), size: weightFontOther, bold: true},
         {text: textRange, size: weightFontOther},
     ], "middle", false);
 
     // Fourth individuals
     generateTexts(isSixthLayer, [
-        {text: d => d.data.name + ' ' + d.data.surname, size: weightFontOther, bold: true},
+        {text: d => nameFirst(d) + ' ' + nameSecond(d), size: weightFontOther, bold: true},
     ], "middle", false);
 
     if(showMarriages) {

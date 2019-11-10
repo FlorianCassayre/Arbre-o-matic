@@ -215,6 +215,26 @@
                                 </div>
                             </div>
 
+                            <div class="form-group row mt-4">
+                                <label class="form-check-label col-form-label col-6" for="select-name-order">Ordre des noms :</label>
+                                <div class="input-group col-6">
+                                    <select class="form-control parameter" id="select-name-order" disabled>
+                                        <option value="0" selected>Prénom(s) puis patronyme(s)</option>
+                                        <option value="1">Patronyme(s) puis prénom(s)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mt-2 mb-2">
+                                <label class="form-check-label col-form-label col-6" for="select-name-display">Prénoms à afficher :</label>
+                                <div class="input-group col-6">
+                                    <select class="form-control parameter" id="select-name-display" disabled>
+                                        <option value="0" selected>Tous</option>
+                                        <option value="1">Premier seulement</option>
+                                    </select>
+                                </div>
+                            </div>
+
                             <h5>Contemporains</h5>
 
                             <div class="form-group row my-2">
@@ -489,9 +509,10 @@
 
                         <h6>Nouveautés</h6>
 
-                        <strong>09/10/2019</strong>
+                        <strong>10/11/2019</strong>
                         <ul>
-                            Résolution de certains problèmes d'encodage
+                            <li>Option permettant d'inverser l'ordre des noms</li>
+                            <li data-toggle="tooltip" data-placement="left" title="Merci à Jean-Michel et Carine">Option d'affichage du premier prénom seulement</li>
                         </ul>
 
                         <div class="text-center">
@@ -509,6 +530,11 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
+                                        <strong>09/10/2019</strong>
+                                        <ul>
+                                            <li>Résolution de certains problèmes d'encodage</li>
+                                        </ul>
+
                                         <strong>01/10/2019</strong>
                                         <ul>
                                             <li data-toggle="tooltip" data-placement="left" title="Merci à Daniel">
