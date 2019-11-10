@@ -167,6 +167,8 @@ function colorValue(id) {
     return $(id).parent().data('colorpicker').getValue();
 }
 
+let shouldShowInitialMessage = true;
+
 function onSettingChange() {
     const selectedDates = parseInt($('#select-dates').val());
     const selectedPlaces = parseInt($('#select-places').val());
@@ -228,12 +230,20 @@ function onSettingChange() {
         computeChildrenCount: coloring === 'childrencount',
     };
 
-    Fan.draw(json, config);
+    if(!Fan.draw(json, config)) {
+        return false;
+    }
+
+    shouldShowInitialMessage = false;
+
+    $('#initial-group').hide();
 
     if(dimensions !== previousDimensions) {
         previousDimensions = dimensions;
         resetZoom();
     }
+
+    return true;
 }
 
 function onColoringChange(scheme) {
@@ -256,8 +266,8 @@ function onColoringChange(scheme) {
     }
 }
 
-$("#file").change(function (e) {
-    const file = e.target.files[0];
+function loadFile(files) {
+    const file = files[0];
     const reader = new FileReader();
 
     reader.addEventListener("loadend", function () {
@@ -267,6 +277,10 @@ $("#file").change(function (e) {
     });
 
     reader.readAsArrayBuffer(file);
+}
+
+$("#file").change(function (e) {
+    loadFile(e.target.files);
 });
 
 individualSelect.on('change', function () {
@@ -481,6 +495,36 @@ function loadExternal(url) {
     };
     xhr.send();
 }
+
+$('#preview').on("click", function() {
+    if(shouldShowInitialMessage) {
+        $('#file').click();
+    }
+}).on('drop', function(e) {
+    $('#preview').removeClass('preview-drop');
+    if(e.originalEvent.dataTransfer && e.originalEvent.dataTransfer.files.length > 0) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        loadFile(e.originalEvent.dataTransfer.files);
+    }
+    return false;
+}).on('dragover',function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+}).on('dragenter', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    if(shouldShowInitialMessage) {
+        $('#preview').addClass('preview-drop');
+    }
+    return false;
+}).on('dragleave', function() {
+    $('#preview').removeClass('preview-drop');
+    return false;
+});
+
 
 $('#sample-toggle').click(function () {
     $('#sample-modal').modal('show');

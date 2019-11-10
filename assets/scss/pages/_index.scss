@@ -143,3 +143,22 @@ div#map {
   -o-transition: visibility 0.2s linear,
   opacity 0.2s linear;
 }
+
+#initial-group {
+  margin: 0;
+  text-align: center;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  pointer-events: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.preview-drop {
+  border: 5px dashed #3b3b3b;
+}
