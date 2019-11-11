@@ -288,10 +288,10 @@ function buildHierarchy(json, config) {
 
 function toJson(data) {
 
-    const triggers = "[鬩]"; // é
+    const triggers = "[�]"; // àéèêëîïôùûÀÉÈÊËÎÏÔÙÛ
 
     const view = new Uint8Array(data);
-    const text = Utf8ArrayToStr(view);
+    const text = new TextDecoder().decode(view);
     const parsed = parseGedcom.parse(text);
 
     const isLikelyAnsi = (new RegExp(triggers)).test(text);
