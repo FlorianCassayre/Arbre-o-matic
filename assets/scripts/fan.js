@@ -10,7 +10,7 @@ function drawFan(json, config) {
     const data = Parse.buildHierarchy(json, config);
     if(data == null) {
         window.alert("Impossible d'interpréter ce fichier");
-        return false;
+        return null;
     }
 
     const radius = Math.round(config.dimensions / 2);
@@ -630,7 +630,7 @@ function drawFan(json, config) {
 
     });
 
-    return true;
+    return data;
 }
 
 module.exports = {

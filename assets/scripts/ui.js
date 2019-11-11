@@ -168,6 +168,7 @@ function colorValue(id) {
 }
 
 let shouldShowInitialMessage = true;
+let filename = "";
 
 function onSettingChange() {
     const selectedDates = parseInt($('#select-dates').val());
@@ -230,10 +231,15 @@ function onSettingChange() {
         computeChildrenCount: coloring === 'childrencount',
     };
 
-    if(!Fan.draw(json, config)) {
+    const result = Fan.draw(json, config);
+    if(!result) {
         return false;
     }
 
+    filename = ('Généalogie' + (result.name || result.surname ? ' ' : '') + (result.name ? result.name : '')
+        + (result.name && result.surname ? ' ' : '') + (result.surname ? result.surname : '')
+        + ' - Arbre-o-matic')
+        .replace(/[|&;$%@"<>()+,]/g, ''); // Filename sanitizing (from: https://stackoverflow.com/a/3780731/4413709)
     shouldShowInitialMessage = false;
 
     $('#initial-group').hide();
@@ -373,10 +379,10 @@ function generatePdf(callback) {
         },
         layout: 'landscape', // Either 'portrait' or 'landscape'
         info: {
-            Title: 'Eventail généalogique', // Title of the document
+            Title: filename, // Title of the document
             Author: 'Arbre-o-matic', // Name of the author
-            Subject: 'Eventail généalogique', // Subject of the document
-            Keywords: 'généalogie;arbre;éventail', // Keywords
+            Subject: 'Éventail généalogique', // Subject of the document
+            Keywords: 'généalogie;arbre;éventail;arbre-o-matic', // Keywords
             //CreationDate: 'DD/MM/YYYY', // Date created (added automatically by PDFKit)
             //ModDate: 'DD/MM/YYYY' // Date last modified
         }
@@ -393,16 +399,20 @@ function generatePdf(callback) {
     doc.end();
 }
 
+function generateFileName(extension) {
+    return filename + '.' + extension;
+}
+
 $("#download-pdf").click(function () {
     generatePdf(function (blob) {
-        downloadContent(blob, "Généalogie.pdf", "pdf");
+        downloadContent(blob, generateFileName("pdf"), "pdf");
     });
 
     return false; // Prevent default link action
 });
 
 $("#download-svg").click(function () {
-    downloadContent(fanAsXml(), "Généalogie.svg", "svg");
+    downloadContent(fanAsXml(), generateFileName("svg"), "svg");
     return false;
 });
 
@@ -443,7 +453,7 @@ function downloadPNG(transparency) {
 
             const a = document.createElement('a');
             a.href = url;
-            a.download = "Généalogie.png";
+            a.download = generateFileName("png");
             document.body.appendChild(a);
             a.click();
         });
