@@ -202,6 +202,9 @@ function onSettingChange() {
         substituteEvents: $('#substitute-events').prop('checked'),
         invertTextArc: $('#invert-text-arc').prop('checked'),
         isTimeVisualisationEnabled: $('#show-chronology').prop('checked'),
+        title: $('#title').val().trim(),
+        titleSize: parseInt($('#title-size').val()) / 100.0,
+        titleMargin: parseInt($('#title-margin').val()) / 100.0,
         weights: {
             generations: [$('#weightg1'), $('#weightg2'), $('#weightg3')].map(e => parseInt(e.val()) / 100.0)
         },

@@ -36,6 +36,9 @@ function drawFan(json, config) {
     const thirdLevel = 4, fourthLevel = 5, fifthLevel = 6, sixthLevel = 7;
     const weightTextMargin = 0.1;
 
+    const titleSize = 0.07 * radius * config.titleSize;
+    const titleSpace = 0.1 * radius * config.titleMargin;
+
     function between(a, b) {
         return d => d.depth >= a && d.depth < b;
     }
@@ -175,10 +178,13 @@ function drawFan(json, config) {
     $(id).empty(); // Clear current contents, if any
 
     const width = 2 * radius, height = radius + Math.max(radius * Math.cos(Math.PI - config.angle / 2), radius * weightRadiusFirst / totalWeight);
+    const hasTitle = config.title.length > 0;
+    const titleBlock = hasTitle ? titleSize + titleSpace : 0;
+    const realHeight = height + titleBlock;
 
     const svg = d3.select('svg#fan')
         .attr('width', width)
-        .attr('height', height)
+        .attr('height', realHeight)
         //.style('overflow', 'visible')
         .attr('font-family', 'Helvetica, Arial, serif');
 
@@ -188,11 +194,21 @@ function drawFan(json, config) {
     const defs = svg.append('defs');
 
     const center = svg.append('g')
-        .attr('transform', 'translate(' + (width / 2) * (1 - marginScale) + ',' + (height / 2) * (1 - marginScale) + ') scale(' + marginScale + ', ' + marginScale + ')');
+        .attr('transform', 'translate(' + (width / 2) * (1 - marginScale) + ',' + ((height / 2) * (1 - marginScale) + titleBlock) + ') scale(' + marginScale + ', ' + marginScale + ')');
 
     const g = center.append('g')
         .attr('transform', 'translate(' + (width / 2) + ', ' + radius + ')' + ' scale(' + scale + ', ' + scale + ')');
     // FIXME scale margin != absolute margin
+
+    if(hasTitle) {
+        center.append('g')
+            .attr('transform', 'translate(' + width / 2 + ', ' + -(titleSize / 2 + titleSpace) + ')' + 'scale(' + titleSize + ', ' + titleSize + ')')
+            .append('text')
+            .attr('font-size', 0.8)
+            .attr('dominant-baseline', 'middle')
+            .attr('text-anchor', 'middle')
+            .text(config.title);
+    }
 
     // --
     function hslToRgb(h, s, l){

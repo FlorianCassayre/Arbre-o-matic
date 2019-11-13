@@ -317,7 +317,34 @@
 
                         <div class="col-6">
 
+                            <h5>Annotations</h5>
+
+                            <div class="form-group row mb-3">
+                                <label for="title" class="col-form-label col-6">Titre principal (facultatif) :</label>
+                                <div class="input-group col-6">
+                                    <input class="form-control parameter" type="text" id="title" placeholder="Aucun" disabled>
+                                </div>
+                            </div>
+
                             <h5>Mesures</h5>
+                            <h6>Titre</h6>
+
+                            <div class="form-group row mb-2">
+                                <div class="form-group row mb-2">
+
+                                    <label for="title-size" class="col-form-label col-6">Taille du titre :</label>
+                                    <div class="input-group col-6 my-auto">
+                                        <input type="range" class="custom-range parameter" id="title-size" min="50" max="250" value="100" disabled>
+                                    </div>
+
+                                    <label for="title-margin" class="col-form-label col-6">Espacement du titre :</label>
+                                    <div class="input-group col-6 my-auto">
+                                        <input type="range" class="custom-range parameter" id="title-margin" min="0" max="250" value="25" disabled>
+                                    </div>
+
+                                </div>
+                            </div>
+
                             <h6>Taille des cases</h6>
 
                             <div class="form-group row mb-2">
@@ -556,11 +583,9 @@
                             <div>
                                 <h6>Nouveautés</h6>
 
-                                <strong>10/11/2019</strong>
+                                <strong>13/11/2019</strong>
                                 <ul>
-                                    <li>Option permettant d'inverser l'ordre des noms</li>
-                                    <li data-toggle="tooltip" data-placement="left" title="Merci à Jean-Michel et Carine">Option d'affichage du premier prénom seulement</li>
-                                    <li data-toggle="tooltip" data-placement="left" title="Merci à Carine">Option de substitution des événements</li>
+                                    <li>Paramètre de choix d'un titre</li>
                                 </ul>
 
                                 <div class="text-center">
@@ -578,6 +603,13 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body">
+                                                <strong>10/11/2019</strong>
+                                                <ul>
+                                                    <li>Option permettant d'inverser l'ordre des noms</li>
+                                                    <li data-toggle="tooltip" data-placement="left" title="Merci à Jean-Michel et Carine">Option d'affichage du premier prénom seulement</li>
+                                                    <li data-toggle="tooltip" data-placement="left" title="Merci à Carine">Option de substitution des événements</li>
+                                                </ul>
+
                                                 <strong>09/10/2019</strong>
                                                 <ul>
                                                     <li>Résolution de certains problèmes d'encodage</li>
