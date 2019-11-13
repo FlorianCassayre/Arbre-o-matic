@@ -484,9 +484,11 @@ $("#print").click(function () {
         iframe.src = url;
     }
 
-    generatePdf(function(blob) {
+    /*generatePdf(function(blob) {
         printPdf(URL.createObjectURL(blob), {type: 'application/pdf'});
-    });
+    });*/
+
+    $("#download-pdf").click(); // Workaround (chrome update)
 
     return false;
 });
