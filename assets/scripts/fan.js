@@ -339,7 +339,7 @@ function drawFan(json, config) {
             .classed(cssClass, true)*/
             .attr('d', boxGenerator)
             .attr('stroke', 'black')
-            .attr('stroke-width', '0.02px');
+            .attr('stroke-width', config.weights.strokes + 'px');
     }
 
     // Individual boxes

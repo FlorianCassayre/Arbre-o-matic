@@ -206,7 +206,8 @@ function onSettingChange() {
         titleSize: parseInt($('#title-size').val()) / 100.0,
         titleMargin: parseInt($('#title-margin').val()) / 100.0,
         weights: {
-            generations: [$('#weightg1'), $('#weightg2'), $('#weightg3')].map(e => parseInt(e.val()) / 100.0)
+            generations: [$('#weightg1'), $('#weightg2'), $('#weightg3')].map(e => parseInt(e.val()) / 100.0),
+            strokes: parseInt($('#stroke-weight').val()) / 1000.0
         },
         contemporary: {
             showEvents: selectedContemporary === 0,
