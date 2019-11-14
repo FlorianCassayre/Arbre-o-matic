@@ -32,8 +32,8 @@ function drawFan(json, config) {
     const showMarriages = config.showMarriages;
 
     const weightRadiusFirst = config.weights.generations[0], weightRadiusClose = config.weights.generations[1], weightRadiusFar = config.weights.generations[2], weightRadiusMarriage = showMarriages ? 0.2 : 0;
-    const weightFontFirst = 0.25, weightFontOther = 0.2, weightFontMarriage = 0.15;
-    const thirdLevel = 4, fourthLevel = 5, fifthLevel = 6, sixthLevel = 7;
+    const weightFontFirst = 0.25, weightFontOther = 0.2, weightFontFar = 0.1, weightFontFurthest = 0.06, weightFontMarriage = 0.15;
+    const thirdLevel = 4, fourthLevel = 5, fifthLevel = 6, sixthLevel = 7, seventhLayer = 8, eighthLayer = 9;
     const weightTextMargin = 0.1;
 
     const titleSize = 0.07 * radius * config.titleSize;
@@ -44,7 +44,7 @@ function drawFan(json, config) {
     }
 
     const isFirstLayer = between(0, 1), isSecondLayer = between(1, thirdLevel),
-        isThirdLayer = between(thirdLevel, fourthLevel), isFourthLayer = between(fourthLevel, fifthLevel), isFifthLayer = between(fifthLevel, sixthLevel), isSixthLayer = d => d.depth >= sixthLevel;
+        isThirdLayer = between(thirdLevel, fourthLevel), isFourthLayer = between(fourthLevel, fifthLevel), isFifthLayer = between(fifthLevel, sixthLevel), isSixthLayer = between(sixthLevel, seventhLayer), isSeventhLayer = between(seventhLayer, eighthLayer), isEightsLayer = d => d.depth >= eighthLayer;
     const isMarriageFirst = d => between(0, fourthLevel)(d) && d.children, isMarriageSecond = d => d.depth >= fourthLevel && d.children;
 
     function applyNormalWeights(tree) {
@@ -54,8 +54,10 @@ function drawFan(json, config) {
                 i = 0;
             } else if(generation < thirdLevel) { // (2)
                 i = 1;
-            } else { // (3)
+            } else if(generation < seventhLayer) { // (3)
                 i = 2;
+            } else { // (4)
+                i = 3;
             }
             tree.weight = config.weights.generations[i];
             if(tree.children) {
@@ -68,7 +70,7 @@ function drawFan(json, config) {
     function applyTimeWeights(tree) {
         const defaultAgeForBirth = 22, defaultAgeDead = 80, maxAgeAlive = 110; // TODO actually use these (for the first ind.)
         const minimumAgeForBirth = 14, maximumAgeForBirth = 60;
-        let minimums = [Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY];
+        let minimums = [Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY];
         function computeRecursive(tree, year, generation) {
             let timeDifference = defaultAgeForBirth;
             const isYearDefined = tree.birth && tree.birth.date && tree.birth.date.year;
@@ -88,8 +90,10 @@ function drawFan(json, config) {
                 i = 0;
             } else if(generation < thirdLevel) { // (2)
                 i = 1;
-            } else { // (3)
+            } else if(generation < seventhLayer) { // (3)
                 i = 2;
+            } else { // (4)
+                i = 3;
             }
             minimums[i] = Math.min(timeDifference, minimums[i]);
 
@@ -135,6 +139,7 @@ function drawFan(json, config) {
 
     const totalWeight = computeTotalWeight(data, 0); // Math.min(depth, 1) * weightRadiusFirst + Math.max(Math.min(depth, thirdLevel) - 1, 0) * weightRadiusClose + Math.max(depth - thirdLevel, 0) * weightRadiusFar + (depth - 1) * weightRadiusMarriage;
 
+    const angleInterpolate = config.angle / Math.PI - 1;
 
     const fixOrientations = true;
 
@@ -449,13 +454,13 @@ function drawFan(json, config) {
     generateThirdLevelTextPaths(2, Math.PI / 2.5, isFifthLayer);
 
     // Sixth nodes
-    generateThirdLevelTextPaths(1, 0, isSixthLayer);
+    generateThirdLevelTextPaths(1, 0, d => d.depth >= sixthLevel);
 
     // Marriage nodes
     if(showMarriages)
         rootNode.descendants().filter(d => d.children).forEach(d => {
             const r = d.y1 + weightRadiusMarriage / 2;
-            const marginAngle = weightTextMargin / r;
+            const marginAngle = d.depth < sixthLevel ? weightTextMargin / r : weightTextMargin / (4 * r);
             const min = Math.min(d.x0, d.x1), max = Math.max(d.x0, d.x1), range = Math.abs(d.x0 - d.x1) - 2 * marginAngle;
             const marriageArcGenerator = fixArc(d3.arc()
                 .startAngle(range <= Math.PI ? min - 0.5 * range + marginAngle : -Math.PI + 1E-3)
@@ -550,6 +555,10 @@ function drawFan(json, config) {
         }
     }
 
+    function nameInline(d) {
+        return nameFirst(d) + ' ' + nameSecond(d);
+    }
+
     function nameFirst(d) {
         return config.givenThenFamilyName ? givenName(d) : d.data.surname;
     }
@@ -558,7 +567,7 @@ function drawFan(json, config) {
         return config.givenThenFamilyName ? d.data.surname : givenName(d);
     }
 
-    // First individual
+    // Generation 1
     generateTexts(isFirstLayer, [
         {text: nameFirst, size: weightFontFirst, bold: true},
         {text: nameSecond, size: weightFontFirst, bold: true},
@@ -566,7 +575,7 @@ function drawFan(json, config) {
         {text: textDeath, size: weightFontFirst}
     ], "middle", false);
 
-    // Secondary individuals
+    // Generations 2-4
     generateTexts(isSecondLayer, [
         {text: nameFirst, size: weightFontOther, bold: true},
         {text: nameSecond, size: weightFontOther, bold: true},
@@ -574,7 +583,7 @@ function drawFan(json, config) {
         {text: textDeath, size: weightFontOther}
     ], "middle", false);
 
-    // Third individuals
+    // Generation 5
     generateTexts(isThirdLayer, [
         {text: nameFirst, size: weightFontOther, bold: true},
         {text: nameSecond, size: weightFontOther, bold: true},
@@ -582,22 +591,32 @@ function drawFan(json, config) {
         {text: textDeath, size: weightFontOther}
     ], "middle", false);
 
-    // Fourth individuals
+    // Generation 6
     generateTexts(isFourthLayer, [
         {text: nameFirst, size: weightFontOther, bold: true},
         {text: nameSecond, size: weightFontOther, bold: true},
         {text: textRange, size: weightFontOther},
     ], "middle", false);
 
-    // Fourth individuals
+    // Generation 7
     generateTexts(isFifthLayer, [
-        {text: d => nameFirst(d) + ' ' + nameSecond(d), size: weightFontOther, bold: true},
+        {text: nameInline, size: weightFontOther, bold: true},
         {text: textRange, size: weightFontOther},
     ], "middle", false);
 
-    // Fourth individuals
+    // Generation 8
     generateTexts(isSixthLayer, [
-        {text: d => nameFirst(d) + ' ' + nameSecond(d), size: weightFontOther, bold: true},
+        {text: nameInline, size: weightFontOther, bold: true},
+    ], "middle", false);
+
+    // Generation 9
+    generateTexts(isSeventhLayer, [
+        {text: nameInline, size: angleInterpolate * weightFontOther + (1 - angleInterpolate) * weightFontFar, bold: true},
+    ], "middle", false);
+
+    // Generation 10
+    generateTexts(isEightsLayer, [
+        {text: nameInline, size: angleInterpolate * weightFontFar + (1 - angleInterpolate) * weightFontFurthest, bold: true},
     ], "middle", false);
 
     if(showMarriages) {

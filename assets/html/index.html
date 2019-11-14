@@ -178,7 +178,7 @@
                             <div class="form-group row mb-3">
                                 <label for="max-generations" class="col-form-label col-8">Nombre de générations :</label>
                                 <div class="input-group col-4">
-                                    <input class="form-control parameter" type="number" id="max-generations" min="1" max="8" value="8" disabled>
+                                    <input class="form-control parameter" type="number" id="max-generations" min="1" max="10" value="8" disabled>
                                 </div>
                             </div>
 
@@ -369,9 +369,14 @@
                                     <input type="range" class="custom-range parameter" id="weightg2" min="90" max="250" value="100" disabled>
                                 </div>
 
-                                <label for="weightg3" class="col-form-label col-6">Génération 5 et au-delà :</label>
+                                <label for="weightg3" class="col-form-label col-6">Générations 5 à 8 :</label>
                                 <div class="input-group col-6 my-auto">
                                     <input type="range" class="custom-range parameter" id="weightg3" min="90" max="250" value="170" disabled>
+                                </div>
+
+                                <label for="weightg4" class="col-form-label col-6">Génération 9 et au-delà :</label>
+                                <div class="input-group col-6 my-auto">
+                                    <input type="range" class="custom-range parameter" id="weightg4" min="90" max="250" value="140" disabled>
                                 </div>
                             </div>
 
@@ -593,10 +598,22 @@
                             <div>
                                 <h6>Nouveautés</h6>
 
+                                <strong>14/11/2019</strong>
+                                <ul>
+                                    <li>Possibilité d'affichage jusqu'à 10 générations</li>
+                                </ul>
+
                                 <strong>13/11/2019</strong>
                                 <ul>
                                     <li>Paramètre de choix d'un titre</li>
                                     <li>Possibilité de modifier l'épaisseur des tracés</li>
+                                </ul>
+
+                                <strong>10/11/2019</strong>
+                                <ul>
+                                    <li>Option permettant d'inverser l'ordre des noms</li>
+                                    <li data-toggle="tooltip" data-placement="left" title="Merci à Jean-Michel et Carine">Option d'affichage du premier prénom seulement</li>
+                                    <li data-toggle="tooltip" data-placement="left" title="Merci à Carine">Option de substitution des événements</li>
                                 </ul>
 
                                 <div class="text-center">
@@ -614,12 +631,6 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                <strong>10/11/2019</strong>
-                                                <ul>
-                                                    <li>Option permettant d'inverser l'ordre des noms</li>
-                                                    <li data-toggle="tooltip" data-placement="left" title="Merci à Jean-Michel et Carine">Option d'affichage du premier prénom seulement</li>
-                                                    <li data-toggle="tooltip" data-placement="left" title="Merci à Carine">Option de substitution des événements</li>
-                                                </ul>
 
                                                 <strong>09/10/2019</strong>
                                                 <ul>
