@@ -4,7 +4,7 @@ const Utils = require('./utils');
 
 const EMPTY = "";
 const TAG_HEAD = "HEAD", TAG_ENCODING = "CHAR", TAG_FORMAT = "FORM", TAG_INDIVIDUAL = "INDI", TAG_FAMILY = "FAM", TAG_CHILD = "CHIL", TAG_HUSBAND = "HUSB", TAG_WIFE = "WIFE",
-    TAG_NAME = "NAME", TAG_GIVEN_NAME = "GIVN", TAG_SURNAME = "SURN", TAG_BIRTH = "BIRT", TAG_BAPTISM = "CHR", TAG_DEATH = "DEAT", TAG_BURIAL = "BURI", TAG_SEX = "SEX",
+    TAG_NAME = "NAME", TAG_GIVEN_NAME = "GIVN", TAG_SURNAME = "SURN", TAG_SURNAME_PREFIX = "SPFX", TAG_BIRTH = "BIRT", TAG_BAPTISM = "CHR", TAG_DEATH = "DEAT", TAG_BURIAL = "BURI", TAG_SEX = "SEX",
     TAG_DATE = "DATE", TAG_PLACE = "PLAC", TAG_MARRIAGE = "MARR", TAG_SIGNATURE = "SIGN", TAG_EVENT = "EVEN", TAG_TYPE = "TYPE", TAG_NOTE = "NOTE", TAG_OCCUPATION = "OCCU";
 const TAG_YES = "YES", TAG_ANSI = "ANSI";
 const TAG_ABOUT = 'ABT', TAG_BEFORE = 'BEF', TAG_AFTER = 'AFT';
@@ -45,6 +45,8 @@ function buildIndividual(json, config) {
     const names = json.tree.filter(byTag(TAG_NAME));
     let name = getFirst(names.flatMap(a => a.tree.filter(byTag(TAG_GIVEN_NAME)).map(o => o.data)), EMPTY).replace(/_/, ' '),
         surname = getFirst(names.flatMap(a => a.tree.filter(byTag(TAG_SURNAME)).map(o => o.data)), EMPTY).replace(/_/, ' ');
+    const surnamePrefix = getFirst(names.flatMap(a => a.tree.filter(byTag(TAG_SURNAME_PREFIX)).map(o => o.data)), EMPTY);
+
     const sex = getFirst(json.tree.filter(byTag(TAG_SEX)).map(s => s.data === 'M'), null);
     const canSign = getFirst(json.tree.filter(byTag(TAG_SIGNATURE)).map(s => s.data === TAG_YES), null);
     const occupations = json.tree.filter(byTag(TAG_OCCUPATION)).map(d => d.data);
@@ -61,6 +63,10 @@ function buildIndividual(json, config) {
             if(split.length > 1 && !surname)
                 surname = split[1];
         })
+    }
+
+    if(surnamePrefix) { // Surname prefix
+        surname = surnamePrefix.split(',').map(s => s.trim()).join(' ') + ' ' + surname;
     }
 
     let birthTags = [TAG_BIRTH], deathTags = [TAG_DEATH];
