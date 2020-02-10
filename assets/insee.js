@@ -25,7 +25,7 @@ let currentPage = 0, resultsPerPage = 25;
 
 const placeSelect = $('#place');
 placeSelect.selectpicker({
-    noneSelectedText : 'Lieu',
+    noneSelectedText : 'Lieu (commune, département, région ou pays)',
     noneResultsText: 'Aucun lieu trouvé',
     liveSearchPlaceholder: 'Commune, département, région ou pays'
 });
@@ -162,7 +162,8 @@ function displayResults(data, offset, limit) {
 
     $('#count').text(data.count.toLocaleString('FR-fr') + ' résultat' + (data.count > 1 ? 's' : ''));
 
-    $('#page-info').text(`Page ${currentPage + 1} sur ${totalPages}`);
+    // Math.max to address totalPages == 0
+    $('#page-info').text(`Page ${currentPage + 1} sur ${Math.max(totalPages, 1)}`);
 
     const tableDiv = $('#table-container');
     tableDiv.removeClass('hidden');
