@@ -30,10 +30,13 @@ const babelConf = {
 };
 
 module.exports = {
-    entry: './assets/index.js',
+    entry: {
+        arbreomatic: './assets/index.js',
+        insee: './assets/insee.js'
+    },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: './js/index.bundle.js',
+        filename: './js/[name].bundle.js',
     },
     // Generate sourcemaps for proper error messages
     devtool: isProduction ? undefined : 'source-map',
@@ -188,10 +191,17 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: './assets/html/index.html',
             filename: 'index.html',
+            chunks: ['arbreomatic'],
+            hash: true,
+        }),
+        new HtmlWebpackPlugin({
+            template: './assets/html/insee/index.html',
+            filename: 'insee/index.html',
+            chunks: ['insee'],
             hash: true,
         }),
         new MiniCssExtractPlugin({
-            filename: './css/styles.css'
+            filename: './css/[name].css',
         }),
         new StringReplacePlugin()
     ]

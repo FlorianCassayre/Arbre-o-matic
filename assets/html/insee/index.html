@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>Fichiers des décès de l'INSEE</title>
+    </head>
+    <body>
+        <div class="container">
+            <div class="text-center">
+                <i class="fas fa-book fa-4x"></i>
+                <h2 class="mt-4">Fichiers des décès de l'INSEE</h2>
+            </div>
+
+            <div class="contents">
+                <p>
+                    Recherchez instantanément parmi <strong>24 millions</strong> de fiches. Commencez par entrer un nom de famille&#8239;:
+                </p>
+
+                <form action="#">
+                    <div class="form-row">
+                        <div class="col-3">
+                            <input type="text" id="surname" class="form-control" placeholder="Nom(s) (obligatoire)">
+                            <div class="invalid-feedback">Veuillez spécifier au moins un nom</div>
+                        </div>
+                        <div class="col-3">
+                            <input type="text" id="name" class="form-control" placeholder="Prénom(s)">
+                        </div>
+                        <div class="col-4">
+                            <select id="place" data-live-search="true" data-width="100%"></select>
+                        </div>
+                        <div class="col-2">
+                            <button type="submit" id="search" class="btn btn-primary" style="width: 100%"><i class="fas fa-search"></i> Rechercher</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="contents hidden" id="table-container" style="padding-top: 10px; padding-bottom: 10px; padding-left: 0; padding-right: 0">
+                <div class="text-right align-middle" style="padding-left: 10px; padding-right: 10px;">
+                    <span class="font-weight-bold" id="count"></span>
+                    &#183;
+                    <span id="page-info"></span>
+                    &#183;
+                    Résultats par page&#8239;:
+                    <select id="limit" class="selectpicker w-auto">
+                        <option value="25" selected>25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+                <table class="table" id="persons">
+                    <thead>
+                        <tr style="border-top: hidden">
+                            <th scope="col">Sexe</th>
+                            <th scope="col">Noms</th>
+                            <th scope="col">Prénoms</th>
+                            <th scope="col">Evénement</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Lieu</th>
+                        </tr>
+                    </thead>
+                </table>
+                <nav aria-label="Navigation">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item navigation-arrow">
+                            <a class="page-link left-arrow" href="#" aria-label="Précédent">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Précédent</span>
+                            </a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item navigation-arrow">
+                            <a class="page-link right-arrow" href="#" aria-label="Suivant">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Suivant</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <hr>
+
+            <div class="footer-copyright text-center py-1 font-italic">
+                <div>
+                    Réalisé et hébergé par <a href="https://florian.cassayre.me">Florian Cassayre</a>
+                </div>
+                <div>
+                    À partir des <a href="">données de l'INSEE</a>
+                </div>
+                <a href="https://github.com/FlorianCassayre/insee-db" target="_blank" style="color: black">
+                    <i class="fab fa-github fa-3x mt-4" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Code source sur GitHub"></i>
+                </a>
+            </div>
+        </div>
+    </body>
+</html>
