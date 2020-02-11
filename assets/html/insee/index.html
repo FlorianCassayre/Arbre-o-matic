@@ -13,7 +13,7 @@
 
             <div class="contents">
                 <p>
-                    Recherchez instantanément parmi <strong>24 millions</strong> de fiches. Commencez par entrer un nom de famille&#8239;:
+                    Recherchez instantanément dans la base des décès enregistrés par l'INSEE depuis <strong>1970</strong>&#8239;:
                 </p>
 
                 <form action="#">
@@ -79,11 +79,57 @@
                 </nav>
             </div>
 
+            <div class="text-center pt-3">
+                La base contient actuellement <strong>24 811 645</strong> fiches
+                <br />
+                <a href="#" id="help"><i class="fas fa-info-circle"></i> Aide à la recherche</a>
+
+                <div class="modal fade" id="help-modal" tabindex="-1" role="dialog" aria-labelledby="help-modal" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Aide à la recherche</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body text-left">
+                                <h6>Informations générales</h6>
+                                <p>
+                                    Afin de rechercher une fiche il vous faudra entrer au moins un nom de famille.
+                                    Les autres champs servent à affiner les résultats mais ne sont pas requis.
+                                </p>
+                                <h6>Noms et prénoms</h6>
+                                <p>
+                                    L'ordre des noms et des prénoms n'a pas d'incidence sur la recherche.
+                                    Ne sont retournées que les fiches qui contiennent tous les noms et prénoms recherchés (mais celles-ci peuvent en contenir d'autres).
+                                </p>
+                                <h6>Lieux</h6>
+                                <p>
+                                    Vous pouvez aussi spécifier un lieu (commune, département région ou pays), dans ce cas toutes les fiches possédant au moins un événement situé dans la zone géographique seront retournées.
+                                    Les communes anciennes sont marquées entre parenthèses, suivies de la commune parent.
+                                </p>
+                                <h6>Mises en garde</h6>
+                                <p>
+                                    Cette base repose sur les données fournies par l'INSEE, celles-ci sont susceptible de contenir des trous ou des erreurs.
+                                </p>
+                                <p>
+                                    L'accentuation des prénoms n'est pas nécessairement correcte.
+                                </p>
+                                <p>
+                                    Certains lieux n'ont pas pu être récupérés et ne sont par conséquent pas affichés.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <hr>
 
             <div class="footer-copyright text-center py-1 font-italic">
                 <div>
-                    Réalisé et hébergé par <a href="https://florian.cassayre.me">Florian Cassayre</a>
+                    Réalisé et hébergé par <a href="https://florian.cassayre.me">Florian Cassayre</a> (<a href="https://florian.cassayre.me/contact">contact</a>)
                 </div>
                 <div>
                     À partir des <a href="">données de l'INSEE</a>

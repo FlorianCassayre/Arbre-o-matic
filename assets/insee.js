@@ -7,8 +7,8 @@ import './scss/insee.scss'
 
 import { library, dom } from '@fortawesome/fontawesome-svg-core'
 
-import { faBook, faSearch, faMars, faVenus } from '@fortawesome/free-solid-svg-icons'
-library.add(faBook, faSearch, faMars, faVenus);
+import { faBook, faSearch, faMars, faVenus, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
+library.add(faBook, faSearch, faMars, faVenus, faInfoCircle);
 
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 library.add(faGithub);
@@ -30,8 +30,9 @@ placeSelect.selectpicker({
     liveSearchPlaceholder: 'Commune, département, région ou pays'
 });
 
-placeSelect.on('change', function () {
-    // TODO
+placeSelect.on('shown.bs.select', function () {
+    placeSelect.empty();
+    placeSelect.selectpicker('refresh');
 });
 
 const limitSelect = $('#limit');
@@ -177,8 +178,8 @@ function displayResults(data, offset, limit) {
     data.results.forEach(row => {
         const tbody = $('<tbody></tbody>');
         const trFirst = $('<tr></tr>'), trSecond = trFirst.clone();
-        function fa(icon) {
-            return `<i class="fas fa-${icon} fa-lg"></i>`
+        function fa(icon, color) {
+            return `<i class="fas fa-${icon} fa-lg" style="color:${color}"></i>`
         }
         function date(str) {
             if(str != null && str.length > 0) {
@@ -188,7 +189,13 @@ function displayResults(data, offset, limit) {
                 return str;
             }
         }
-        const fieldsShared = [fa(row.gender ? 'mars' : 'venus'), row.nom.toUpperCase(), row.prenom];
+        let genderIcon;
+        if(row.gender) { // Male
+            genderIcon = fa('mars', '#54aa98');
+        } else { // Female
+            genderIcon = fa('venus', '#755ea1')
+        }
+        const fieldsShared = [genderIcon, row.nom.toUpperCase(), row.prenom];
         const fieldsFirst = ['Naissance' , date(row.birthDate), row.birthPlace];
         const fieldsSecond = ['Décès', date(row.deathDate), row.deathPlace];
         let first = true;
@@ -271,6 +278,10 @@ function setFormDisabled(disabled) {
     $("form input, form button").prop("disabled", disabled);
 }
 
-$('document').ready(function(){
+$('document').ready(function() {
     $('[data-toggle=tooltip]').tooltip(); // Tooltips
+});
+
+$('#help').on('click', function () { // Help button
+    $('#help-modal').modal('show');
 });
