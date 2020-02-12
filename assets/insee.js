@@ -106,6 +106,7 @@ function displayResults(data, offset, limit) {
     const ul = $('ul.pagination');
     $('ul.pagination > li:not(.navigation-arrow)').remove(); // Remove pages
 
+
     function pageButton(n, disabled, active) {
         return `<li class="page-item ${disabled ? 'disabled' : ''} ${active ? 'active' : ''}"><a class="page-link" href="#" data-page="${n}">${n}</a></li>`
     }
@@ -175,6 +176,18 @@ function displayResults(data, offset, limit) {
 
     table.removeClass('brighter');
 
+    const nav = $('nav');
+    const noResults = $('div#no-results');
+
+    table.removeClass('hidden');
+    nav.removeClass('hidden');
+    noResults.addClass('hidden');
+    if(data.count === 0) { // No results
+        table.addClass('hidden');
+        nav.addClass('hidden');
+        noResults.removeClass('hidden');
+    }
+
     data.results.forEach(row => {
         const tbody = $('<tbody></tbody>');
         const trFirst = $('<tr></tr>'), trSecond = trFirst.clone();
@@ -214,11 +227,10 @@ function displayResults(data, offset, limit) {
     });
 }
 
+let surname = '', name = '', place = 0;
+
 function updateResults() {
     const offset = currentPage * resultsPerPage, limit = resultsPerPage;
-
-    const surname = $('#surname').val(), name = $('#name').val();
-    const place = placeSelect.val();
 
     const pagination = $('ul.pagination');
     pagination.addClass('disabled');
@@ -243,15 +255,19 @@ function updateResults() {
 
 $('#search').click(function(e) {
 
-    const surname = $('#surname');
-    surname.removeClass('is-invalid');
-    if(surname.val().trim().length > 0) {
+    const surnameElement = $('#surname');
+
+    surname = surnameElement.val();
+    name = $('#name').val();
+    place = placeSelect.val();
+
+    surnameElement.removeClass('is-invalid');
+    if(surname.trim().length > 0) {
         currentPage = 0;
 
         updateResults();
     } else {
-        surname.addClass('is-invalid');
-
+        surnameElement.addClass('is-invalid');
     }
 
     e.preventDefault();
