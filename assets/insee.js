@@ -74,7 +74,7 @@ jQuery("select#place").siblings().find("input[type='text']").keyup(function (e) 
                 }
             })
             .fail(function () {
-                alert("Impossible d'effectuer la requête")
+                console.log("Impossible d'effectuer la requête");
             });
     } else {
         placeSelect.empty();
@@ -229,7 +229,7 @@ function updateResults() {
             displayResults(data, offset, limit);
         })
         .fail(function () {
-            alert("Impossible d'effectuer la requête")
+            console.log("Impossible d'effectuer la requête");
         })
         .always(function () {
             pagination.removeClass('disabled');
