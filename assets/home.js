@@ -4,8 +4,8 @@ import './scripts/vendor/bootstrap'
 
 import { library, dom } from '@fortawesome/fontawesome-svg-core'
 
-import { faLeaf, faCertificate } from '@fortawesome/free-solid-svg-icons'
-library.add(faLeaf, faCertificate);
+import { faLeaf } from '@fortawesome/free-solid-svg-icons'
+library.add(faLeaf);
 
 dom.i2svg();
 

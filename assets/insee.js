@@ -7,8 +7,8 @@ import './scss/insee.scss'
 
 import { library, dom } from '@fortawesome/fontawesome-svg-core'
 
-import { faBook, faSearch, faMars, faVenus, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
-library.add(faBook, faSearch, faMars, faVenus, faInfoCircle);
+import { faBook, faSearch, faMars, faVenus, faInfoCircle, faLongArrowAltLeft } from '@fortawesome/free-solid-svg-icons'
+library.add(faBook, faSearch, faMars, faVenus, faInfoCircle, faLongArrowAltLeft);
 
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 library.add(faGithub);
