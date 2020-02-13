@@ -31,7 +31,8 @@ const babelConf = {
 
 module.exports = {
     entry: {
-        arbreomatic: './assets/index.js',
+        home: './assets/home.js',
+        arbreomatic: './assets/arbreomatic.js',
         insee: './assets/insee.js'
     },
     output: {
@@ -191,6 +192,12 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: './assets/html/index.html',
             filename: 'index.html',
+            chunks: ['home'],
+            hash: true,
+        }),
+        new HtmlWebpackPlugin({
+            template: './assets/html/arbreomatic/index.html',
+            filename: 'arbreomatic/index.html',
             chunks: ['arbreomatic'],
             hash: true,
         }),

@@ -1,0 +1,48 @@
+@import "~bootstrap/scss/functions";
+
+@import "./vendors/bootstrap";
+@import "./vendors/bootstrap-select";
+
+html {
+  overflow-x: hidden;
+}
+
+body {
+  background-color: #f8f9fa !important;
+  overflow: hidden; /* Default action */
+  min-width: 992px;
+}
+
+div.container {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  min-width: 962px;
+
+  min-height: 700px;
+}
+
+div.contents {
+  margin-top: 20px;
+  background-color: white;
+
+  border: 1px solid rgba(0, 0, 0, .125);
+  border-radius: .25rem;
+  box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
+
+  padding: 20px;
+}
+
+div.card {
+  border: 1px solid rgba(0, 0, 0, .125);
+  border-radius: .25rem;
+  box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
+}
+
+.service {
+  min-height: 100%;
+  cursor: pointer;
+}
+
+.card {
+  height: 100%;
+}

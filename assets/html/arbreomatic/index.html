@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+  ${require('./head.html')}
+</head>
+<body>
+
+    <div id="overlay">
+        <div id="loading">
+            <i class="fas fa-spinner fa-pulse fa-5x fa-fw mb-4"></i>
+            <h2>Chargement...</h2>
+            <em>Merci de patienter quelques instants.</em>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="text-center">
+            <svg id="logo" width="160" height="100"></svg>
+            <h1>Arbre-o-matic<sup style="font-size: 10pt;vertical-align: baseline;position: relative;top: -1.0em;">BÊTA</sup></h1>
+            <em>Générateur d'éventail généalogique</em>
+        </div>
+
+        <!-- Working area -->
+        <div class="contents">
+            <div class="row">
+                <div class="col-4" id="toolbar">
+                    <h4>Fichier Gedcom</h4>
+
+                    <p>Aucune donnée n'est transmise au serveur : tout se passe dans votre navigateur
+                        <!--<i class="fa fa-question-circle fa-fw" aria-hidden="true" id="help" data-toggle="tooltip" data-placement="top" title="Aide"></i></p>-->
+
+                    <div class="modal fade" id="help-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Aide</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <h6>Certains caractères ne s'affichent pas correctement ?</h6>
+                                    Vérifier lors de l'exportation depuis votre logiciel ou plateforme que l'encodage du fichier Gedcom est bien paramétré sur <strong>UTF-8</strong>. Cet outil <em>ne supporte pas</em> l'ASCII étendu.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="file btn btn-lg btn-success file-button col-12">
+                        <i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>
+                        Charger un fichier Gedcom
+                        <input type="file" name="file" id="file" accept=".ged,.gedcom" />
+                    </div>
+
+                    <div class="text-center">
+                        (<a href="#" id="sample-toggle">ou bien essayez avec un fichier échantillon</a>)
+                    </div>
+
+                    <div class="modal fade" id="sample-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Fichiers Gedcom échantillon</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Si vous ne possédez pas de fichier Gedcom ou bien que vous souhaitez tester le service, il est possible d'en charger un parmi la liste suivante :
+                                    <ul>
+                                        <li><a href="#" class="sample" data-link="https://genealogyoflife.com/tng/gedcom/AmericanPresidents.ged">Famille des présidents américains</a></li>
+                                        <li><a href="#" class="sample" data-link="https://genealogyoflife.com/tng/gedcom/Royal92.ged">Familles royales européennes (Royal92)</a></li>
+                                        <li><a href="#" class="sample" data-link="https://genealogyoflife.com/tng/gedcom/Shakespeare.ged">Famille Shakespeare</a></li>
+                                        <li><a href="#" class="sample" data-link="https://genealogyoflife.com/tng/gedcom/bach.ged">Famille Bach</a></li>
+                                    </ul>
+
+                                    <p>Un grand merci à <a href="http://famousfamilytrees.blogspot.com">Paul Pruitt</a>.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <h4>Souche</h4>
+
+                    <p>
+                        Choisissez l'individu au centre de l'arbre
+                    </p>
+                    <div class="row-fluid col-xs-12">
+                        <label style="width: 100%">
+                            <select id="individual-select" class="col-xs-12" data-live-search="true" data-width="100%" disabled>
+                            </select>
+                        </label>
+                    </div>
+
+
+                    <hr>
+
+                    <h4>Exporter</h4>
+
+                    <p>
+                        Possibilité d'imprimer votre arbre ou d'en télécharger une copie dans le format souhaité
+                    </p>
+
+                    <p>
+                        <a class="btn btn-lg btn-primary col-12 disabled" id="print" href="#" role="button">
+                            <i class="fas fa-print fa-fw" aria-hidden="true"></i>
+                            Imprimer...
+                        </a>
+                    </p>
+
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle col-12" type="button" id="download-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled>
+                            <i class="fas fa-download fa-fw" aria-hidden="true"></i>
+                            Télécharger
+                        </button>
+                        <div class="dropdown-menu col-12" aria-labelledby="download-menu">
+                            <h6 class="dropdown-header">Formats vectoriels</h6>
+                            <a class="dropdown-item" id="download-pdf" href="#">
+                                <i class="far fa-file-pdf fa-fw fa-lg" aria-hidden="true"></i>
+                                Document PDF
+                            </a>
+                            <a class="dropdown-item" id="download-svg" href="#">
+                                <i class="far fa-file-code fa-fw fa-lg" aria-hidden="true"></i>
+                                Image SVG
+                            </a>
+                            <h6 class="dropdown-header">Formats matriciels</h6>
+                            <a class="dropdown-item" id="download-png-transparency" href="#">
+                                <i class="far fa-file-image fa-fw fa-lg" aria-hidden="true"></i>
+                                Image PNG (transparence)
+                            </a>
+                            <a class="dropdown-item" id="download-png-background" href="#">
+                                <i class="far fa-file-image fa-fw fa-lg" aria-hidden="true"></i>
+                                Image PNG (fond blanc)
+                            </a>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+                <div class="col-8" id="preview">
+
+                    <div id="initial-group">
+                        <h5>Cliquez pour charger un fichier Gedcom...</h5>
+                        <em>(ou glissez-déposez un fichier)</em>
+                    </div>
+
+                    <div id="map">
+                        <svg id="fan"></svg>
+                    </div>
+
+                    <div id="preview-group" style="display: none;">
+                        <button type="button" class="btn btn-light button-zoom" id="zoom-plus" title="Agrandir">
+                            <i class="fas fa-plus" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="btn btn-light button-zoom" id="zoom-reset" title="Recentrer">
+                            <i class="far fa-dot-circle" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="btn btn-light button-zoom" id="zoom-minus" title="Rétrécir">
+                            <i class="fas fa-minus" aria-hidden="true"></i>
+                        </button>
+
+                        <span id="tip"><i class="fas fa-arrows-alt" aria-hidden="true"></i> <em>Utilisez la souris pour déplacer ou agrandir l'aperçu</em></span>
+                    </div>
+                </div>
+
+                <div class="col-12" id="advanced">
+
+                    <div class="row no-gutters">
+                        <div class="col-6">
+
+                            <h5>Informations</h5>
+
+                            <div class="form-group row mb-3">
+                                <label for="max-generations" class="col-form-label col-8">Nombre de générations :</label>
+                                <div class="input-group col-4">
+                                    <input class="form-control parameter" type="number" id="max-generations" min="1" max="10" value="8" disabled>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="form-check-label col-form-label col-6" for="select-dates">Format des dates :</label>
+                                <div class="input-group col-6">
+                                    <select class="form-control parameter" id="select-dates" disabled>
+                                        <option value="0" selected>AAAA</option>
+                                        <option value="1">JJ/MM/AAAA</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row my-2">
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input parameter" id="show-invalid-dates" checked disabled>
+                                        <label class="form-check-label" for="show-invalid-dates">Afficher les dates invalides</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mt-4">
+                                <label class="form-check-label col-form-label col-6" for="select-places">Format des lieux :</label>
+                                <div class="input-group col-6">
+                                    <select class="form-control parameter" id="select-places" disabled>
+                                        <option value="0">Afficher le lieu complet</option>
+                                        <option value="1" selected>Afficher la ville uniquement</option>
+                                        <option value="2">Ne pas afficher les lieux</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mt-4 mb-3">
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input parameter" id="show-marriages" checked disabled>
+                                        <label class="form-check-label" for="show-marriages">Afficher les mariages</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mt-4">
+                                <label class="form-check-label col-form-label col-6" for="select-name-order">Ordre des noms :</label>
+                                <div class="input-group col-6">
+                                    <select class="form-control parameter" id="select-name-order" disabled>
+                                        <option value="0" selected>Prénom(s) puis patronyme(s)</option>
+                                        <option value="1">Patronyme(s) puis prénom(s)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mt-2">
+                                <label class="form-check-label col-form-label col-6" for="select-name-display">Prénoms à afficher :</label>
+                                <div class="input-group col-6">
+                                    <select class="form-control parameter" id="select-name-display" disabled>
+                                        <option value="0" selected>Tous</option>
+                                        <option value="1">Premier seulement</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mt-3 mb-3">
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input parameter" id="substitute-events" checked disabled>
+                                        <label class="form-check-label" for="substitute-events">Substituer les événements manquants <i class="fas fa-question-circle" data-toggle="tooltip" title="Utiliser le baptême lorsque la naissance n'est pas spécifiée"></i></label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h5>Contemporains</h5>
+
+                            <div class="form-group row my-2">
+                                <label class="form-check-label col-form-label col-6" for="select-hidden-generations">Informations à masquer :</label>
+                                <div class="input-group col-6">
+                                    <select class="form-control parameter" id="select-hidden-generations" disabled>
+                                        <option value="0" selected>Aucune</option>
+                                        <option value="1">Événements seulement</option>
+                                        <option value="2">Toutes sauf le nom de l'individu central</option>
+                                        <option value="3">Toutes sans exception</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mb-2">
+                                <label for="hidden-generations-count" class="col-form-label col-8">Générations concernées :</label>
+                                <div class="input-group col-4">
+                                    <input class="form-control parameter" type="number" id="hidden-generations-count" min="1" max="8" value="1" disabled>
+                                </div>
+                            </div>
+
+                            <h5>Format</h5>
+
+                            <div class="form-group row mt-3">
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input parameter" id="show-missing" disabled>
+                                        <label class="form-check-label" for="show-missing">Afficher les cases vides</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mt-2 mb-2">
+                                <label for="fan-angle" class="col-form-label col-8">Ouverture de l'éventail (en degrés) :</label>
+                                <div class="input-group col-4">
+                                    <input class="form-control parameter" type="number" id="fan-angle" min="180" max="360" value="270" aria-describedby="inputGroupPrepend" disabled>
+                                    <div class="invalid-feedback">
+                                        Choisissez une valeur.
+                                    </div>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" id="inputGroupPrepend">°</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mt-2">
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input parameter" id="show-chronology" disabled>
+                                        <label class="form-check-label" for="show-chronology">Chronologie</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mt-3">
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input parameter" id="invert-text-arc" disabled>
+                                        <label class="form-check-label" for="invert-text-arc">Adapter l'orientation du texte</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-6">
+
+                            <h5>Annotations</h5>
+
+                            <div class="form-group row mb-3">
+                                <label for="title" class="col-form-label col-6">Titre principal (facultatif) :</label>
+                                <div class="input-group col-6">
+                                    <input class="form-control parameter" type="text" id="title" placeholder="Aucun" disabled>
+                                </div>
+                            </div>
+
+                            <h5>Mesures</h5>
+                            <h6>Titre</h6>
+
+                            <div class="form-group row mb-2">
+                                <div class="form-group row mb-2">
+
+                                    <label for="title-size" class="col-form-label col-6">Taille du titre :</label>
+                                    <div class="input-group col-6 my-auto">
+                                        <input type="range" class="custom-range parameter" id="title-size" min="50" max="250" value="100" disabled>
+                                    </div>
+
+                                    <label for="title-margin" class="col-form-label col-6">Espacement du titre :</label>
+                                    <div class="input-group col-6 my-auto">
+                                        <input type="range" class="custom-range parameter" id="title-margin" min="0" max="250" value="25" disabled>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <h6>Tracés</h6>
+
+                            <div class="form-group row mb-2">
+                                <label for="stroke-weight" class="col-form-label col-6">Épaisseur des traits :</label>
+                                <div class="input-group col-6 my-auto">
+                                    <input type="range" class="custom-range parameter" id="stroke-weight" min="5" max="30" value="20" disabled>
+
+                                </div>
+                            </div>
+
+                            <h6>Taille des cases</h6>
+
+                            <div class="form-group row mb-2">
+
+                                <label for="weightg1" class="col-form-label col-6">Génération 1 :</label>
+                                <div class="input-group col-6 my-auto">
+                                    <input type="range" class="custom-range parameter" id="weightg1" min="90" max="250" value="100" disabled>
+                                </div>
+
+                                <label for="weightg2" class="col-form-label col-6">Générations 2 à 4 :</label>
+                                <div class="input-group col-6 my-auto">
+                                    <input type="range" class="custom-range parameter" id="weightg2" min="90" max="250" value="100" disabled>
+                                </div>
+
+                                <label for="weightg3" class="col-form-label col-6">Générations 5 à 8 :</label>
+                                <div class="input-group col-6 my-auto">
+                                    <input type="range" class="custom-range parameter" id="weightg3" min="90" max="250" value="170" disabled>
+                                </div>
+
+                                <label for="weightg4" class="col-form-label col-6">Génération 9 et au-delà :</label>
+                                <div class="input-group col-6 my-auto">
+                                    <input type="range" class="custom-range parameter" id="weightg4" min="90" max="250" value="140" disabled>
+                                </div>
+                            </div>
+
+                            <h6>Taille du fichier matriciel</h6>
+
+                            <div class="form-group row mb-3">
+                                <label for="size-pixels" class="col-form-label col-8">Largeur (pixels) :</label>
+                                <div class="input-group col-4">
+                                    <input class="form-control parameter" type="number" id="size-pixels" min="200" max="6000" value="3000" aria-describedby="size-pixels-prepend" disabled>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" id="size-pixels-prepend">px</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h5>Couleurs</h5>
+
+                            <div class="form-group row mb-2">
+                                <label for="color-individuals" class="col-form-label col-7">Case individu :</label>
+                                <div class="input-group col-5 colorpicker-group">
+                                    <input type="text" class="form-control" id="color-individuals" value="#ffffff" />
+                                    <span class="input-group-append">
+                                            <span class="input-group-text colorpicker-input-addon"><i></i></span>
+                                        </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="color-marriages" class="col-form-label col-7">Case mariage :</label>
+                                <div class="input-group col-5 colorpicker-group">
+                                    <input type="text" class="form-control" id="color-marriages" value="#efefef" />
+                                    <span class="input-group-append">
+                                            <span class="input-group-text colorpicker-input-addon"><i></i></span>
+                                        </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mt-3">
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input parameter" id="text-contrast" checked disabled>
+                                        <label class="form-check-label" for="text-contrast">Contraste automatique du texte</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row mb-3 mt-3">
+                                <label class="form-check-label col-form-label col-6" for="select-color-scheme">Coloriage dynamique :</label>
+                                <div class="input-group col-6">
+                                    <select class="form-control parameter" id="select-color-scheme" disabled>
+                                        <option value="none" selected>Désactivé</option>
+                                        <option value="sex">Sexe</option>
+                                        <!--<option value="alive">Encore en vie</option>-->
+                                        <option value="generation">Génération</option>
+                                        <option value="agedeath">Âge au décès</option>
+                                        <option value="agemarriage">Âge au mariage</option>
+                                        <option value="birthdate">Date de naissance</option>
+                                        <option value="birthtown">Ville de naissance</option>
+                                        <option value="birthdepartement">Département de naissance</option>
+                                        <option value="patronym">Patronyme</option>
+                                        <option value="signature">Sait signer</option>
+                                        <option value="occupation">Profession</option>
+                                        <option value="childrencount">Nombre d'enfants</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div id="group-color-dual" class="group-color" style="display: none">
+                                <div class="form-group row mb-2">
+                                    <label for="color1" class="col-form-label col-7">Couleur 1 :</label>
+                                    <div class="input-group col-5 colorpicker-group">
+                                        <input type="text" class="form-control" id="color1" value="#ffffff" />
+                                        <span class="input-group-append">
+                                            <span class="input-group-text colorpicker-input-addon"><i></i></span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="color2" class="col-form-label col-7">Couleur 2 :</label>
+                                    <div class="input-group col-5 colorpicker-group">
+                                        <input type="text" class="form-control" id="color2" value="" />
+                                        <span class="input-group-append">
+                                            <span class="input-group-text colorpicker-input-addon"><i></i></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="group-color-gradient" class="group-color" style="display: none">
+                                <div class="form-group row mb-2 gradient-group">
+                                    <label for="color-start" class="col-form-label col-7">Valeur minimale :</label>
+                                    <div class="input-group col-5 colorpicker-group">
+                                        <input type="text" class="form-control" id="color-start" value="" />
+                                        <span class="input-group-append">
+                                            <span class="input-group-text colorpicker-input-addon"><i></i></span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row gradient-group">
+                                    <label for="color-end" class="col-form-label col-7">Valeur maximale :</label>
+                                    <div class="input-group col-5 colorpicker-group">
+                                        <input type="text" class="form-control" id="color-end" value="" />
+                                        <span class="input-group-append">
+                                            <span class="input-group-text colorpicker-input-addon"><i></i></span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div id="gradient-preview" class="col-6 offset-3 mt-3"></div>
+                            </div>
+
+                            <div id="group-color-textual" class="group-color" style="display: none">
+
+                                <div class="form-group row mt-2">
+                                    <div class="col-12">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="textual-mode" id="textual-mode1" value="0" checked>
+                                            <label class="form-check-label" for="textual-mode1">
+                                                Palette automatique
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row mt-3">
+                                    <div class="col-12">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input parameter" id="random-selection" checked disabled>
+                                            <label class="form-check-label" for="random-selection">Attribution aléatoire</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row mt-2">
+                                    <label for="saturation" class="col-form-label col-6">Saturation :</label>
+                                    <div class="input-group col-6 my-auto">
+                                        <input type="range" class="custom-range parameter" id="saturation" min="0" max="100" value="100" disabled>
+                                    </div>
+
+                                    <label for="value" class="col-form-label col-6">Lumière :</label>
+                                    <div class="input-group col-6 my-auto">
+                                        <input type="range" class="custom-range parameter" id="value" min="0" max="100" value="85" disabled>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group row mt-3">
+                                    <div class="col-12">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="textual-mode" id="textual-mode2" value="1" disabled>
+                                            <label class="form-check-label" for="textual-mode2">
+                                                Palette personnalisée (à venir)
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <footer class="page-footer pt-4">
+            <div class="container-fluid text-center text-md-left">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div style="width: 100%;">
+                                <h6>Lettre d'information</h6>
+                                <p>Restez informé des dernières nouveautés :</p>
+
+                                <!-- Begin Mailchimp Signup Form -->
+                                <div id="mc_embed_signup" class="mb-3" style="width: 100%;">
+                                    <form action="https://gmail.us4.list-manage.com/subscribe/post?u=ae91ffd8285e9c1c6e0d1fe01&amp;id=35246dbb9f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+                                        <div class="form-row align-items-center">
+                                            <div class="col-8">
+                                                <label class="sr-only" for="mce-EMAIL">Courriel</label>
+                                                <input class="form-control mb-2" type="email" value="" name="EMAIL" id="mce-EMAIL" placeholder="adresse@exemple.fr" style="width: 100%">
+                                            </div>
+                                            <div id="mce-responses" class="clear">
+                                                <div class="response" id="mce-error-response" style="display:none"></div>
+                                                <div class="response" id="mce-success-response" style="display:none"></div>
+                                            </div>
+                                            <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+                                            <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_ae91ffd8285e9c1c6e0d1fe01_35246dbb9f" tabindex="-1" value=""></div>
+                                            <div class="col-4">
+                                                <button type="submit" class="btn btn-primary mb-2" value="S'abonner" name="subscribe" id="mc-embedded-subscribe" style="width: 100%">S'abonner</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!--End mc_embed_signup-->
+
+                            </div>
+
+                            <div>
+                                <h6>Contact</h6>
+                                <p>Pour toute suggestion de fonctionnalité, rapport de bug, ou autre : <a href="https://florian.cassayre.me/contact">un formulaire de contact se trouve ici</a>. Vos retours sont très appréciés !</p>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div>
+                                <h6>Nouveautés</h6>
+
+                                <strong>30/12/2019</strong>
+                                <ul>
+                                    <li data-toggle="tooltip" data-placement="left" title="Merci à Claude">Les préfixes des noms n'étaient pas affichés</li>
+                                </ul>
+
+                                <div class="text-center">
+                                    <a href="#" id="news-button">Afficher plus...</a>
+                                </div>
+
+
+                                <div class="modal fade" id="news-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Nouveautés</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+
+                                                <strong>14/11/2019</strong>
+                                                <ul>
+                                                    <li>Possibilité d'affichage jusqu'à 10 générations</li>
+                                                </ul>
+
+                                                <strong>13/11/2019</strong>
+                                                <ul>
+                                                    <li>Paramètre de choix d'un titre</li>
+                                                    <li>Possibilité de modifier l'épaisseur des tracés</li>
+                                                </ul>
+
+                                                <strong>10/11/2019</strong>
+                                                <ul>
+                                                    <li>Option permettant d'inverser l'ordre des noms</li>
+                                                    <li data-toggle="tooltip" data-placement="left" title="Merci à Jean-Michel et Carine">Option d'affichage du premier prénom seulement</li>
+                                                    <li data-toggle="tooltip" data-placement="left" title="Merci à Carine">Option de substitution des événements</li>
+                                                </ul>
+
+                                                <strong>09/10/2019</strong>
+                                                <ul>
+                                                    <li>Résolution de certains problèmes d'encodage</li>
+                                                </ul>
+
+                                                <strong>01/10/2019</strong>
+                                                <ul>
+                                                    <li data-toggle="tooltip" data-placement="left" title="Merci à Daniel">
+                                                        Les cases vides étaient incorrectement coloriées
+                                                    </li>
+                                                </ul>
+
+                                                <strong>07/09/2019</strong>
+                                                <ul>
+                                                    <li>
+                                                        Plus de navigateurs sont désormais compatibles
+                                                    </li>
+                                                    <li>
+                                                        La navigation sur les appareils mobiles a été améliorée
+                                                    </li>
+                                                </ul>
+
+                                                <strong>02/09/2019</strong>
+                                                <ul>
+                                                    <li>
+                                                        Meilleure compatibilité du fichier SVG exporté
+                                                    </li>
+                                                    <li>
+                                                        Nouveaux filtres de coloriage : âge au mariage, profession, nombre d'enfants
+                                                    </li>
+                                                </ul>
+
+                                                <strong>01/09/2019</strong>
+                                                <ul>
+                                                    <li data-toggle="tooltip" data-placement="left" title="Merci à Hélène et Romain">
+                                                        Nouveau filtre de coloriage par signature
+                                                    </li>
+                                                    <li>
+                                                        Les fichiers ANSI sont désormais supportés
+                                                    </li>
+                                                    <li>
+                                                        Nouveau format de téléchargement : PNG
+                                                    </li>
+                                                </ul>
+
+                                                <strong>31/08/2019</strong>
+                                                <ul>
+                                                    <li>
+                                                        Performances nettement améliorées
+                                                    </li>
+                                                    <li>
+                                                        Option d'adaptation de l'orientation du texte
+                                                    </li>
+                                                </ul>
+
+                                                <strong>29/08/2019</strong>
+                                                <ul>
+                                                    <li>
+                                                        Nouveaux filtres de coloriage dynamique
+                                                    </li>
+                                                    <li>
+                                                        Possibilité de cacher le nom de l'individu central
+                                                    </li>
+                                                </ul>
+
+                                                <strong>28/08/2019</strong>
+                                                <ul>
+                                                    <li>
+                                                        Personnalisation des couleurs
+                                                    </li>
+                                                    <li>
+                                                        Coloriage dynamique (expérimental)
+                                                    </li>
+                                                </ul>
+
+                                                <strong>20/08/2019</strong>
+                                                <ul>
+                                                    <li>
+                                                        Ajout d'un mode de visualisation chronologique
+                                                    </li>
+                                                    <li>
+                                                        Gestion de l'affichage des contemporains
+                                                    </li>
+                                                </ul>
+
+                                                <strong>18/08/2019</strong>
+                                                <ul>
+                                                    <li>
+                                                        Les lieux sont mieux reconnus
+                                                    </li>
+                                                </ul>
+
+                                                <strong>17/08/2019</strong>
+                                                <ul>
+                                                    <li data-toggle="tooltip" data-placement="left" title="Merci à Anthony">
+                                                        Indication sur le format du fichier
+                                                    </li>
+                                                    <li data-toggle="tooltip" data-placement="left" title="Merci à Romain et Hélène">
+                                                        Support des dates républicaines
+                                                    </li>
+                                                    <li data-toggle="tooltip" data-placement="left" title="Merci à Hélène">
+                                                        Meilleure organisation des individus
+                                                    </li>
+                                                    <li>
+                                                        Les cases "mariage" ne débordent plus
+                                                    </li>
+                                                </ul>
+
+                                                <strong>16/08/2019</strong>
+                                                <ul>
+                                                    <li>
+                                                        Sortie de la version bêta
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="footer-copyright text-center py-1 font-italic">
+
+                <div>
+                    Réalisé et hébergé par <a href="https://florian.cassayre.me">Florian Cassayre</a>
+                </div>
+                <div>
+                    Modèle inspiré de <a href="https://geneanet.org">Geneanet</a>
+                </div>
+                <div>
+                    Diagramme conçu avec <a href="https://d3js.org/">d3.js</a> et <a href="https://github.com/tmcw/parse-gedcom">parse-gedcom</a> ; impression avec <a href="https://pdfkit.org/">PDFKit</a> et <a href="https://github.com/alafr/SVG-to-PDFKit">SVG-to-PDFKit</a> ; interface avec <a href="https://getbootstrap.com/">Bootstrap</a>, <a href="https://github.com/anvaka/panzoom">panzoom</a> et <a href="https://developer.snapappointments.com/bootstrap-select/">bootstrap-select</a>
+                </div>
+                <div>
+                    À utiliser avec un navigateur moderne
+                </div>
+
+                <a href="https://github.com/FlorianCassayre/Arbre-o-matic" target="_blank" style="color: black">
+                    <i class="fab fa-github fa-3x mt-4" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Code source sur GitHub"></i>
+                </a>
+
+            </div>
+        </footer>
+    </div>
+
+
+
+
+    <!-- Scripts -->
+    <script>
+        var isReady = true;
+        window.onerror = function errorHandler(msg, url, line) {
+            isReady = false;
+            var e = document.getElementById('loading');
+            e.innerHTML = "<h2><i class=\"fas fa-exclamation-triangle\" aria-hidden=\"true\"></i> Une erreur est survenue</h2>Votre navigateur n'est malheureusement pas compatible.";
+            return false;
+        };
+    </script>
+
+
+</body>
+</html>
