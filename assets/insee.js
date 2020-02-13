@@ -30,6 +30,8 @@ placeSelect.selectpicker({
     liveSearchPlaceholder: 'Commune, département, région ou pays'
 });
 
+$('.bs-searchbox > input').attr('autocomplete', 'random'); // Disable autocomplete
+
 placeSelect.on('shown.bs.select', function () {
     placeSelect.empty();
     placeSelect.selectpicker('refresh');
