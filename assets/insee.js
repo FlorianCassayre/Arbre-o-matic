@@ -7,8 +7,8 @@ import './scss/insee.scss'
 
 import { library, dom } from '@fortawesome/fontawesome-svg-core'
 
-import { faBook, faSearch, faMars, faVenus, faInfoCircle, faLongArrowAltLeft } from '@fortawesome/free-solid-svg-icons'
-library.add(faBook, faSearch, faMars, faVenus, faInfoCircle, faLongArrowAltLeft);
+import { faBook, faSearch, faMars, faVenus, faInfoCircle, faLongArrowAltLeft, faFileDownload, faFileCsv } from '@fortawesome/free-solid-svg-icons'
+library.add(faBook, faSearch, faMars, faVenus, faInfoCircle, faLongArrowAltLeft, faFileDownload, faFileCsv);
 
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 library.add(faGithub);
@@ -181,6 +181,9 @@ function displayResults(data, offset, limit) {
     const nav = $('nav');
     const noResults = $('div#no-results');
 
+    const downloadGroup = $('#download-tooltip');
+    const downloadButton = $('#download-button');
+
     table.removeClass('hidden');
     nav.removeClass('hidden');
     noResults.addClass('hidden');
@@ -188,6 +191,14 @@ function displayResults(data, offset, limit) {
         table.addClass('hidden');
         nav.addClass('hidden');
         noResults.removeClass('hidden');
+    }
+
+    if(data.count > 0 && data.count <= 100) {
+        downloadButton.removeClass('disabled');
+        downloadGroup.tooltip('disable');
+    } else {
+        downloadButton.addClass('disabled');
+        downloadGroup.tooltip('enable');
     }
 
     data.results.forEach(row => {
@@ -302,4 +313,51 @@ $('document').ready(function() {
 
 $('#help').on('click', function () { // Help button
     $('#help-modal').modal('show');
+});
+
+$('#download-csv').on('click', function (e) {
+
+    function downloadContent(data, filename, type) {
+        const file = new Blob([data], {type: type});
+        if (window.navigator.msSaveOrOpenBlob) // IE10+
+            window.navigator.msSaveOrOpenBlob(file, filename);
+        else { // Others
+            const a = document.createElement("a"), url = URL.createObjectURL(file);
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(function () {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 0);
+        }
+    }
+
+    getPersons(0, 100, surname, name, place)
+        .done(function(data) {
+            const lines = [];
+            lines.push(['sexe', 'noms', 'prenoms', 'date_naissance', 'lieu_naissance', 'date_deces', 'lieu_deces']);
+
+            data.results.forEach(r => {
+                lines.push([r.gender ? 'M' : 'F', r.nom, r.prenom, r.birthDate, r.birthPlace, r.deathDate, r.deathPlace]);
+            });
+
+            const valueSeparator = ',', lineSeparator = '\n', doubleQuotes = '"';
+
+            const csv = lines.map(l => l.map(s => s.includes(valueSeparator) ? doubleQuotes + s.replace(doubleQuotes, '\\"') + doubleQuotes : s).join(valueSeparator)).join(lineSeparator);
+
+            function sanitize(filename) {
+                return filename.replace(/[|&;$%@"<>()+,]/g, '');
+            }
+
+            const parts = [surname, name].map(s => s.trim()).filter(s => s.length > 0);
+
+            downloadContent(csv, sanitize(`Export recherche '${parts.join(' ')}' (arbre.app - INSEE).csv`), 'text/csv');
+        })
+        .fail(function () {
+            console.log("Impossible d'effectuer la requête");
+        });
+
+    e.preventDefault();
 });

@@ -34,25 +34,48 @@
                             <select id="place" data-live-search="true" data-width="100%"></select>
                         </div>
                         <div class="col-2">
-                            <button type="submit" id="search" class="btn btn-primary" style="width: 100%"><i class="fas fa-search"></i> Rechercher</button>
+                            <button type="submit" id="search" class="btn btn-primary" style="width: 100%"><i class="fas fa-search fa-fw"></i> Rechercher</button>
                         </div>
                     </div>
                 </form>
             </div>
 
             <div class="contents hidden" id="table-container" style="padding-top: 10px; padding-bottom: 10px; padding-left: 0; padding-right: 0">
-                <div class="text-right align-middle" style="padding-left: 10px; padding-right: 10px;">
-                    <span class="font-weight-bold" id="count"></span>
-                    &#183;
-                    <span id="page-info"></span>
-                    &#183;
-                    Résultats par page&#8239;:
-                    <select id="limit" class="selectpicker w-auto">
-                        <option value="25" selected>25</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
+                <div class="row">
+                    <div class="col-4">
+                        <div style="padding-left: 10px;">
+                            <div class="btn-group" id="download-tooltip" data-toggle="tooltip" data-placement="top" title="L'exportation n'est disponible que pour les recherches de moins de 100 résultats">
+                                <button type="button" id="download-button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-file-download fa-fw"></i>
+                                    Exporter
+                                </button>
+                                <div class="dropdown-menu">
+                                    <h6 class="dropdown-header">Formats disponibles</h6>
+                                    <a class="dropdown-item" href="#" id="download-csv">
+                                        <i class="fas fa-file-csv fa-fw"></i>
+                                        Format CSV
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <div class="text-right align-middle" style="padding-right: 10px;">
+                            <span class="font-weight-bold" id="count"></span>
+                            &#183;
+                            <span id="page-info"></span>
+                            &#183;
+                            Résultats par page&#8239;:
+                            <select id="limit" class="selectpicker w-auto">
+                                <option value="25" selected>25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
+
+
                 <div id="no-results" class="text-center mt-2 hidden">
                     <h5>Aucun résultat</h5>
                     <p class="font-italic">Essayez d'élargir vos critères de recherche</p>
@@ -91,7 +114,7 @@
             <div class="text-center pt-3">
                 La base contient actuellement <strong>24 811 645</strong> fiches
                 <br />
-                <a href="#" id="help"><i class="fas fa-info-circle"></i> Aide à la recherche</a>
+                <a href="#" id="help"><i class="fas fa-info-circle fa-fw"></i> Aide à la recherche</a>
 
                 <div class="modal fade" id="help-modal" tabindex="-1" role="dialog" aria-labelledby="help-modal" aria-hidden="true">
                     <div class="modal-dialog" role="document">
