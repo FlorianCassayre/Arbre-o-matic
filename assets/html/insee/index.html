@@ -37,6 +37,45 @@
                             <button type="submit" id="search" class="btn btn-primary" style="width: 100%"><i class="fas fa-search fa-fw"></i> Rechercher</button>
                         </div>
                     </div>
+
+
+                    <div class="form-row mt-3">
+
+                        <div class="col-2 offset-1">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-filter"></i></span>
+                                </div>
+                            <select class="form-control" id="event">
+                                <option value="birth">Naissance</option>
+                                <option value="death">Décès</option>
+                            </select>
+                            </div>
+                        </div>
+
+                        <div class="col-4">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Entre</span>
+                                </div>
+                                <input type="number" id="after" class="form-control" aria-label="Année de début" placeholder="Début" min="0" max="2020">
+                                <input type="number" id="before" class="form-control" aria-label="Année de début" placeholder="Fin" min="0" max="2020">
+                            </div>
+                        </div>
+
+                        <div class="col-2">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-sort"></i></span>
+                                </div>
+                                <select class="form-control" id="order">
+                                <option value="ascending">Croissant</option>
+                                <option value="descending">Décroissant</option>
+                            </select>
+                            </div>
+
+                        </div>
+                    </div>
                 </form>
             </div>
 
@@ -140,6 +179,11 @@
                                 <p>
                                     Vous pouvez aussi spécifier un lieu (commune, département région ou pays), dans ce cas toutes les fiches possédant au moins un événement situé dans la zone géographique seront retournées.
                                     Les communes anciennes sont marquées entre parenthèses, suivies de la commune parent.
+                                </p>
+                                <h6>Dates et tri</h6>
+                                <p>
+                                    Enfin, il est aussi possible de rechercher grâce à une date précise ou un intervalle (ouvert ou fermé).
+                                    Les données sont automatiquement triées en fonction de la date de l'événement sélectionné.
                                 </p>
                                 <h6>Mises en garde</h6>
                                 <p>

@@ -7,8 +7,8 @@ import './scss/insee.scss'
 
 import { library, dom } from '@fortawesome/fontawesome-svg-core'
 
-import { faBook, faSearch, faMars, faVenus, faInfoCircle, faLongArrowAltLeft, faFileDownload, faFileCsv } from '@fortawesome/free-solid-svg-icons'
-library.add(faBook, faSearch, faMars, faVenus, faInfoCircle, faLongArrowAltLeft, faFileDownload, faFileCsv);
+import { faBook, faSearch, faMars, faVenus, faInfoCircle, faLongArrowAltLeft, faFileDownload, faFileCsv, faFilter, faSort } from '@fortawesome/free-solid-svg-icons'
+library.add(faBook, faSearch, faMars, faVenus, faInfoCircle, faLongArrowAltLeft, faFileDownload, faFileCsv, faFilter, faSort);
 
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 library.add(faGithub);
@@ -240,7 +240,7 @@ function displayResults(data, offset, limit) {
     });
 }
 
-let surname = '', name = '', place = 0;
+let surname = '', name = '', place = 0, event = '', after = '', before = '', order = '';
 
 function updateResults() {
     const offset = currentPage * resultsPerPage, limit = resultsPerPage;
@@ -249,7 +249,7 @@ function updateResults() {
     pagination.addClass('disabled');
 
     setFormDisabled(true);
-    getPersons(offset, limit, surname, name, place)
+    getPersons(offset, limit, surname, name, place, event, after, before, order)
         .done(function(data) {
             displayResults(data, offset, limit);
         })
@@ -273,6 +273,10 @@ $('#search').click(function(e) {
     surname = surnameElement.val();
     name = $('#name').val();
     place = placeSelect.val();
+    event = $('#event').val();
+    after = $('#after').val();
+    before = $('#before').val();
+    order = $('#order').val();
 
     surnameElement.removeClass('is-invalid');
     if(surname.trim().length > 0) {
@@ -286,13 +290,17 @@ $('#search').click(function(e) {
     e.preventDefault();
 });
 
-function getPersons(offset, limit, surname, name, place) {
+function getPersons(offset, limit, surname, name, place, event, after, before, order) {
     return $.get(host + "persons", {
         offset: offset,
         limit: limit,
         surname: surname,
         name: name,
-        place: place
+        place: place,
+        event: event,
+        after: after,
+        before: before,
+        order: order
     });
 }
 
@@ -304,7 +312,7 @@ function getPlaces(limit, prefix) {
 }
 
 function setFormDisabled(disabled) {
-    $("form input, form button").prop("disabled", disabled);
+    $("form input, form button, form select").prop("disabled", disabled);
 }
 
 $('document').ready(function() {
@@ -334,7 +342,7 @@ $('#download-csv').on('click', function (e) {
         }
     }
 
-    getPersons(0, 100, surname, name, place)
+    getPersons(0, 100, surname, name, place, event, after, before, order)
         .done(function(data) {
             const lines = [];
             lines.push(['sexe', 'noms', 'prenoms', 'date_naissance', 'lieu_naissance', 'date_deces', 'lieu_deces']);
