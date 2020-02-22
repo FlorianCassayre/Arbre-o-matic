@@ -201,6 +201,8 @@ function displayResults(data, offset, limit) {
         downloadGroup.tooltip('enable');
     }
 
+    const male = $('#male'), female = $('#female');
+
     data.results.forEach(row => {
         const tbody = $('<tbody></tbody>');
         const trFirst = $('<tr></tr>'), trSecond = trFirst.clone();
@@ -217,16 +219,22 @@ function displayResults(data, offset, limit) {
         }
         let genderIcon;
         if(row.gender) { // Male
-            genderIcon = fa('mars', '#54aa98');
+            genderIcon = male;
         } else { // Female
-            genderIcon = fa('venus', '#755ea1')
+            genderIcon = female;
         }
         const fieldsShared = [genderIcon, row.nom.toUpperCase(), row.prenom];
         const fieldsFirst = ['Naissance' , date(row.birthDate), row.birthPlace];
         const fieldsSecond = ['Décès', date(row.deathDate), row.deathPlace];
         let first = true;
         fieldsShared.forEach(f => {
-            trFirst.append($(`<td rowspan="2" class="${first ? 'text-center' : ''}"></td>`).html(f)); // XSS! (nah, should be safe...)
+            const row = $(`<td rowspan="2" class="${first ? 'text-center' : ''}"></td>`);
+            if(first) { // Icon
+                genderIcon.clone().appendTo(row);
+            } else {
+                row.html(f);
+            }
+            trFirst.append(row); // XSS! (nah, should be safe...)
             first = false;
         });
         fieldsFirst.forEach(f => {
