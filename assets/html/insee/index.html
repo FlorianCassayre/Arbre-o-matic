@@ -88,10 +88,24 @@
                 <div class="row">
                     <div class="col-4">
                         <div style="padding-left: 10px;">
+                            <div id="popover-content" class="hidden">
+                                <div class="input-group">
+                                    <input type="text" class="form-control link" readonly>
+                                    <!--<div class="input-group-append">
+                                        <button class="btn btn-outline-secondary copy" type="button">Copier</button>
+                                    </div>-->
+                                </div>
+                            </div>
+                            <button type="button" id="permalink" class="btn btn-info mr-1"
+                                    data-placement="top"
+                                    data-toggle="popover"
+                                    title="Permalien vers cette recherche">
+                                <i class="fas fa-link"></i>
+                            </button>
+
                             <div class="btn-group" id="download-tooltip" data-toggle="tooltip" data-placement="top" title="L'exportation n'est disponible que pour les recherches de moins de 100 résultats">
                                 <button type="button" id="download-button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-file-download fa-fw"></i>
-                                    Exporter
                                 </button>
                                 <div class="dropdown-menu">
                                     <h6 class="dropdown-header">Formats disponibles</h6>
@@ -124,7 +138,7 @@
                     <h5>Aucun résultat</h5>
                     <p class="font-italic">Essayez d'élargir vos critères de recherche</p>
                 </div>
-                <table class="table" id="persons">
+                <table class="table mt-2" id="persons">
                     <thead>
                         <tr style="border-top: hidden">
                             <th scope="col">Sexe</th>

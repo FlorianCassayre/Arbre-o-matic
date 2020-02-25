@@ -5,12 +5,25 @@ import 'bootstrap-select'
 import './scss/insee.scss'
 
 
-import { library, dom } from '@fortawesome/fontawesome-svg-core'
+import {dom, library} from '@fortawesome/fontawesome-svg-core'
 
-import { faBook, faSearch, faMars, faVenus, faInfoCircle, faLongArrowAltLeft, faFileDownload, faFileCsv, faFilter, faSort } from '@fortawesome/free-solid-svg-icons'
-library.add(faBook, faSearch, faMars, faVenus, faInfoCircle, faLongArrowAltLeft, faFileDownload, faFileCsv, faFilter, faSort);
+import {
+    faBook,
+    faFileCsv,
+    faFileDownload,
+    faFilter,
+    faInfoCircle,
+    faLink,
+    faLongArrowAltLeft,
+    faMars,
+    faSearch,
+    faSort,
+    faVenus
+} from '@fortawesome/free-solid-svg-icons'
+import {faGithub} from '@fortawesome/free-brands-svg-icons'
 
-import { faGithub } from '@fortawesome/free-brands-svg-icons'
+library.add(faBook, faSearch, faMars, faVenus, faInfoCircle, faLongArrowAltLeft, faFileDownload, faFileCsv, faFilter, faSort, faLink);
+
 library.add(faGithub);
 
 dom.i2svg();
@@ -19,9 +32,10 @@ dom.watch(); // Important because we are dynamically adding icons
 
 // ---
 
-const host = "https://insee.arbre.app/";
+const HOST_API = "https://insee.arbre.app/", HOST_FRONT = "https://arbre.app/insee";
 
 let currentPage = 0, resultsPerPage = 25;
+let preservePage = false;
 
 const placeSelect = $('#place');
 placeSelect.selectpicker({
@@ -288,7 +302,11 @@ $('#search').click(function(e) {
 
     surnameElement.removeClass('is-invalid');
     if(surname.trim().length > 0) {
-        currentPage = 0;
+        if(!preservePage) {
+            currentPage = 0;
+        } else {
+            preservePage = false;
+        }
 
         updateResults();
     } else {
@@ -299,7 +317,7 @@ $('#search').click(function(e) {
 });
 
 function getPersons(offset, limit, surname, name, place, event, after, before, order) {
-    return $.get(host + "persons", {
+    return $.get(HOST_API + "persons", {
         offset: offset,
         limit: limit,
         surname: surname,
@@ -313,7 +331,7 @@ function getPersons(offset, limit, surname, name, place, event, after, before, o
 }
 
 function getPlaces(limit, prefix) {
-    return $.get(host + "places", {
+    return $.get(HOST_API + "places", {
         limit: limit,
         prefix: prefix
     });
@@ -376,4 +394,177 @@ $('#download-csv').on('click', function (e) {
         });
 
     e.preventDefault();
+});
+
+// Anchor
+
+function getHashValue() {
+    return window.location.hash.substr(1);
+}
+
+// https://stackoverflow.com/a/21903119/4413709
+function getHashParameters() {
+    const pageUrl = getHashValue(), urlVariables = pageUrl.split('&');
+    const result = {};
+
+    for (let i = 0; i < urlVariables.length; i++) {
+        const parameterName = urlVariables[i].split('=');
+        const key = parameterName[0];
+        const value = parameterName[1] === undefined ? true : decodeURIComponent(parameterName[1]);
+        
+        result[key] = value;
+    }
+
+    return result;
+}
+
+const P_SURNAME = 's', P_NAME = 'n', P_PLACE = 'p', P_EVENT = 'e', P_AFTER = 'a', P_BEFORE = 'b', P_ORDER = 'o', P_PAGE = 'k', P_LIMIT = 'l';
+const V_BIRTH = 'b', V_DEATH = 'd', V_ASCEND = 'a', V_DESCEND = 'd';
+
+function getPermalink() {
+    const hash = '#', equal = '=', and = '&';
+
+    const parameters = [];
+
+    function add(k, v) {
+        parameters.push(k + equal + encodeURIComponent(v));
+    }
+
+    add(P_SURNAME, surname);
+    if(name.length > 0) {
+        add(P_NAME, name);
+    }
+    const placeText = placeSelect.find('option:selected').text();
+    if(
+        placeText.length > 0) {
+        add(P_PLACE, placeText);
+    }
+    if(after.length > 0 || before.length > 0 || event !== 'birth' || order !== 'ascending') {
+        add(P_EVENT, event === 'birth' ? V_BIRTH : V_DEATH);
+        if(after.length > 0) {
+            add(P_AFTER, after);
+        }
+        if(before.length > 0) {
+            add(P_BEFORE, before);
+        }
+        add(P_ORDER, order === 'ascending' ? V_ASCEND : V_DESCEND);
+    }
+    if(currentPage > 0 || resultsPerPage !== 25) {
+        add(P_PAGE, currentPage);
+        add(P_LIMIT, resultsPerPage);
+    }
+
+    return HOST_FRONT + hash + parameters.join(and);
+}
+
+function loadPermalink() {
+    const parameters = getHashParameters();
+
+    history.pushState("", document.title, window.location.pathname + window.location.search); // Remove hash from URL
+
+    function get(k) {
+        return k in parameters ? String(parameters[k]) : '';
+    }
+
+    function isNormalInteger(str) {
+        const n = Math.floor(Number(str));
+        return n !== Infinity && String(n) === str && n >= 0;
+    }
+
+    const surname = get(P_SURNAME), name = get(P_NAME), placePrefix = get(P_PLACE), event = get(P_EVENT), after = get(P_AFTER), before = get(P_BEFORE), order = get(P_ORDER), page = get(P_PAGE), limit = get(P_LIMIT);
+
+    if(surname.trim().length > 0) {
+        const hasPlace = placePrefix.trim().length > 0;
+
+        $('#surname').val(surname);
+        $('#name').val(name);
+
+        if(hasPlace) {
+            setFormDisabled(true);
+
+            getPlaces(1, placePrefix)
+                .done(function(data) {
+                    placeSelect.empty();
+                    if(data.results.length > 0) {
+                        const r = data.results[0];
+                        const option = $('<option>', {
+                            value: r.id,
+                            text: r.fullname
+                        });
+                        placeSelect.append(option);
+                    }
+                })
+                .always(function () {
+                    setFormDisabled(false);
+                    placeSelect.selectpicker('refresh');
+                    $('button[type="submit"]').trigger('click');
+                });
+        }
+
+        if(event === V_BIRTH || event === V_DEATH) {
+            const eventKey = event === V_BIRTH ? 'birth' : 'death';
+            $(`select#event > option[value="${eventKey}"]`).prop('selected', true);
+        }
+        if(isNormalInteger(after)) {
+            $('#after').val(after);
+        }
+        if(isNormalInteger(before)) {
+            $('#before').val(before);
+        }
+        if(order === V_ASCEND || order === V_DESCEND) {
+            const orderKey = event === V_ASCEND ? 'ascending' : 'descending';
+            $(`select#order > option[value="${orderKey}"]`).prop('selected', true);
+        }
+        if(isNormalInteger(page) && isNormalInteger(limit)) {
+            const perPage = parseInt(limit);
+            const res = $(`select#limit > option[value="${perPage}"]`);
+            if(res.length > 0) {
+                resultsPerPage = perPage;
+                currentPage = parseInt(page);
+                preservePage = true; // Hacky
+                res.prop('selected', true);
+                limitSelect.selectpicker('refresh'); // Needed
+            }
+        }
+
+        if(!hasPlace) { // Weird but works
+            $('button[type="submit"]').trigger('click');
+        }
+    }
+}
+
+loadPermalink();
+
+$(function() { // Popovers
+    const popover = $("[data-toggle=popover]");
+    popover.popover({
+        html: true,
+        sanitize: false,
+        content: function() {
+            const content = $('#popover-content').clone();
+            content.removeClass('hidden');
+            content.find('input.link').val(getPermalink());
+
+            return content;
+        }
+    });
+
+    popover.on('shown.bs.popover', function () {
+        $('input.link').on('click', function() {
+            $(this).select();
+        });
+
+        /*$('.copy').on('click', function() {
+            $('input.link').select(0);
+            document.execCommand("copy");
+        });*/
+    });
+});
+
+$(document).mouseup(function (e) {
+    const container = $(".popover");
+
+    if (!container.is(e.target)  && container.has(e.target).length === 0)  {
+        container.popover("hide");
+    }
 });

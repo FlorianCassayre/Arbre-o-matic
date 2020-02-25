@@ -51,3 +51,12 @@ tbody:nth-child(odd) {
 ul.disabled > li {
     @extend .disabled;
 }
+
+input[readonly]{
+  background-color: white !important;
+}
+
+.popover{
+  width: 500px;
+  max-width: 100%; /* Max Width of the popover (depending on the container!) */
+}
