@@ -7,22 +7,10 @@ import './scss/insee.scss'
 
 import {dom, library} from '@fortawesome/fontawesome-svg-core'
 
-import {
-    faBook,
-    faFileCsv,
-    faFileDownload,
-    faFilter,
-    faInfoCircle,
-    faLink,
-    faLongArrowAltLeft,
-    faMars,
-    faSearch,
-    faSort,
-    faVenus
-} from '@fortawesome/free-solid-svg-icons'
+import { faBook, faFileCsv, faFileDownload, faFilter, faInfoCircle, faLink, faLongArrowAltLeft, faMars, faSearch, faSort, faVenus, faUndoAlt } from '@fortawesome/free-solid-svg-icons'
 import {faGithub} from '@fortawesome/free-brands-svg-icons'
 
-library.add(faBook, faSearch, faMars, faVenus, faInfoCircle, faLongArrowAltLeft, faFileDownload, faFileCsv, faFilter, faSort, faLink);
+library.add(faBook, faSearch, faMars, faVenus, faInfoCircle, faLongArrowAltLeft, faFileDownload, faFileCsv, faFilter, faSort, faLink, faUndoAlt);
 
 library.add(faGithub);
 
@@ -114,6 +102,8 @@ $("a.right-arrow").click(function(e) {
     updateResults();
     e.preventDefault();
 });
+
+const reset = $('#reset');
 
 function displayResults(data, offset, limit) {
     const totalPages = Math.ceil(data.count / limit);
@@ -260,7 +250,27 @@ function displayResults(data, offset, limit) {
         tbody.append(trFirst, trSecond);
         table.append(tbody);
     });
+
+    reset.removeClass('hidden');
 }
+
+function resetForm() {
+    $('#surname').val('');
+    $('#name').val('');
+    placeSelect.empty();
+    placeSelect.selectpicker('refresh');
+    $('#event').val('birth');
+    $('#after').val('');
+    $('#before').val('');
+    $('#order').val('ascending');
+    $('#reset').addClass('hidden');
+    $('#table-container').addClass('hidden');
+}
+
+reset.click(function(e) {
+    e.preventDefault();
+    resetForm();
+});
 
 let surname = '', name = '', place = 0, event = '', after = '', before = '', order = '';
 
