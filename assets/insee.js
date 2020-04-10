@@ -512,7 +512,7 @@ function loadPermalink() {
             $('#before').val(before);
         }
         if(order === V_ASCEND || order === V_DESCEND) {
-            const orderKey = event === V_ASCEND ? 'ascending' : 'descending';
+            const orderKey = order === V_ASCEND ? 'ascending' : 'descending';
             $(`select#order > option[value="${orderKey}"]`).prop('selected', true);
         }
         if(isNormalInteger(page) && isNormalInteger(limit)) {
