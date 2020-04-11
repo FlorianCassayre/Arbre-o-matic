@@ -15,6 +15,7 @@ _Outils et services généalogiques libres_
     - [Article du 17/08/2019](https://www.genealogiedutoulois.fr/actualite-354-zoom-sur.html)
     - [Article du 11/02/2020](https://www.genealogiedutoulois.fr/actualite-380-fichiers-des-deces-de-linsee.html)
 - [Garde du Vœu, décembre 2019](https://garde-du-voeu.com/wp/arbre-o-matic/)
+- [Généalogie Pratique, article de janvier 2020](https://www.genealogiepratique.fr/comment-consulter-fichiers-deces-insee/#Les_fichiers_de_deces_sur_Arbre_app)
 - [Fédération Girondine de Généalogie, 09/01/2020](http://adherents.fshgenea33.fr/annee2020/agf-09-01-20.pdf)
 - [Cercle Généalogique et Héraldique
 de la Principauté de Monaco](https://www.genealogiemonaco.org/liens-utiles/)
