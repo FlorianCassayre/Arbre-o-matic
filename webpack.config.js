@@ -39,6 +39,22 @@ module.exports = {
         path: path.resolve(__dirname, 'dist'),
         filename: './js/[name].bundle.js',
     },
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                default: false,
+                vendors: false,
+                commons: {
+                    name: 'commons',
+                    minChunks: 2,
+                    chunks: 'all',
+                    priority: 20,
+                    reuseExistingChunk: true,
+                    enforce: true
+                }
+            }
+        }
+    },
     // Generate sourcemaps for proper error messages
     devtool: isProduction ? undefined : 'source-map',
     performance: {
@@ -192,23 +208,23 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: './assets/html/index.html',
             filename: 'index.html',
-            chunks: ['home'],
+            chunks: ['home', 'commons'],
             hash: true,
         }),
         new HtmlWebpackPlugin({
             template: './assets/html/arbreomatic/index.html',
             filename: 'arbreomatic/index.html',
-            chunks: ['arbreomatic'],
+            chunks: ['arbreomatic', 'commons'],
             hash: true,
         }),
         new HtmlWebpackPlugin({
             template: './assets/html/insee/index.html',
             filename: 'insee/index.html',
-            chunks: ['insee'],
+            chunks: ['insee', 'commons'],
             hash: true,
         }),
         new MiniCssExtractPlugin({
-            filename: './css/[name].css',
+            filename: './css/[name].css'
         }),
         new StringReplacePlugin()
     ]
