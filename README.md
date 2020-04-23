@@ -24,6 +24,9 @@ de la Principauté de Monaco](https://www.genealogiemonaco.org/liens-utiles/)
     - [Post du 11/02/2020](https://www.facebook.com/GeneaLogiques/posts/2603253009797292)
 - [Cercle généalogique lorrain d’Île de France, post du 12/02/2020](https://www.facebook.com/CGLIDF/posts/164251515038234)
 - [Centre d'Études Généalogiques du Douaisis](https://www.lecegd.fr/cest-sympa/)
+- [Centre Généalogique de Loire-Atlantique, article du 20/03/2020](https://www.cgla44.fr/blog-du-cgla/260-base-des-deces-de-l-insee.html)
+- [Genea Lilas, post du 27/03/2020](https://sites.google.com/site/genealilas/infos/les-infos)
+- [Wikimanche, section ressources](https://www.wikimanche.fr/Aide:Ressources)
 - ...
 
 Merci (entre autres) à eux !
