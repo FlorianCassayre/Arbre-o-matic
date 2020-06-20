@@ -76,9 +76,6 @@ jQuery("select#place").siblings().find("input[type='text']").keyup(function (e) 
 
                     lastReceived = requestIndex;
                 }
-            })
-            .fail(function () {
-                console.log("Impossible d'effectuer la requête");
             });
     } else {
         placeSelect.empty();
@@ -285,9 +282,6 @@ function updateResults() {
         .done(function(data) {
             displayResults(data, offset, limit);
         })
-        .fail(function () {
-            console.log("Impossible d'effectuer la requête");
-        })
         .always(function () {
             pagination.removeClass('disabled');
             setFormDisabled(false);
@@ -326,7 +320,10 @@ $('#search').click(function(e) {
     e.preventDefault();
 });
 
+let errorFlag = false;
+
 function getPersons(offset, limit, surname, name, place, event, after, before, order) {
+    errorFlag = false;
     return $.get(HOST_API + "persons", {
         offset: offset,
         limit: limit,
@@ -337,14 +334,38 @@ function getPersons(offset, limit, surname, name, place, event, after, before, o
         after: after,
         before: before,
         order: order
-    });
+    }).fail(failureFallback);
 }
 
 function getPlaces(limit, prefix) {
+    errorFlag = false;
     return $.get(HOST_API + "places", {
         limit: limit,
         prefix: prefix
-    });
+    }).fail(failureFallback);
+}
+
+function failureFallback(xhr, status, error) {
+    console.log("Request error");
+
+    if(xhr.status === 503 && xhr.hasOwnProperty('responseJSON') && !errorFlag) { // An information should be displayed
+        errorFlag = true;
+
+        const json = xhr.responseJSON;
+
+        const modal = $('#server-message');
+        const content = $('#server-message-content');
+        let message;
+        if(json.hasOwnProperty('information')) { // A message is available
+            message = json.information;
+        } else { // No message provided
+            message = 'Le serveur n\'est actuellement pas en mesure de traiter votre requête.';
+        }
+
+        content.text(message);
+
+        modal.modal('show');
+    }
 }
 
 function setFormDisabled(disabled) {
