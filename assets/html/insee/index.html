@@ -215,21 +215,21 @@
             </div>
 
             <div class="text-center pt-3">
-                La base contient <strong data-toggle="tooltip" data-placement="top" title="Décembre 2019 (prochaine mise à jour : Juin 2020)">24 811 645</strong> fiches
+                La base contient <strong>25 210 523</strong> fiches (<em>juin 2020</em>)
                 <br />
-                <a href="#" id="help"><i class="fas fa-info-circle fa-fw"></i> Aide à la recherche</a>
+                <a href="#" id="help"><i class="fas fa-info-circle fa-fw"></i> Informations générales</a>
 
                 <div class="modal fade" id="help-modal" tabindex="-1" role="dialog" aria-labelledby="help-modal" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
+                    <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Aide à la recherche</h5>
+                                <h5 class="modal-title">Informations générales</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body text-left">
-                                <h6>Informations générales</h6>
+                                <h6>Principe</h6>
                                 <p>
                                     Afin de rechercher une fiche il vous faudra entrer au moins un nom de famille.
                                     Les autres champs servent à affiner les résultats mais ne sont pas requis.
@@ -249,9 +249,10 @@
                                     Enfin, il est aussi possible de rechercher grâce à une date précise ou un intervalle (ouvert ou fermé).
                                     Les données sont automatiquement triées en fonction de la date de l'événement sélectionné.
                                 </p>
-                                <h6>Mises en garde</h6>
+                                <h6>Mises en garde <i class="fas fa-exclamation-circle fa-fw"></i></h6>
                                 <p>
                                     Cette base repose sur les données fournies par l'INSEE, celles-ci sont susceptible de contenir des trous ou des erreurs.
+                                    Il n'est pas utile de signaler les éventuelles erreurs.
                                 </p>
                                 <p>
                                     L'accentuation des prénoms n'est pas nécessairement correcte.
@@ -269,14 +270,206 @@
 
             <div class="footer-copyright text-center py-1 font-italic">
                 <div>
-                    Réalisé et hébergé par <a href="https://florian.cassayre.me">Florian Cassayre</a> (<a href="https://florian.cassayre.me/contact">contact</a>)
+                    Réalisé et hébergé par <a href="https://florian.cassayre.me" target="_blank">Florian Cassayre</a> (<a href="https://florian.cassayre.me/contact" target="_blank">contact</a>)
                 </div>
                 <div>
-                    À partir des <a href="https://www.insee.fr/fr/information/4190491">données de l'INSEE</a>
+                    À partir des <a href="https://www.insee.fr/fr/information/4190491" target="_blank">données de l'INSEE</a>
+                </div>
+                <div>
+                    <a href="#" id="api"><i class="fas fa-wrench fa-fw"></i> API</a>
                 </div>
                 <a href="https://github.com/FlorianCassayre/insee-db" target="_blank" style="color: black">
                     <i class="fab fa-github fa-3x mt-4" aria-hidden="true" data-toggle="tooltip" data-placement="top" title="Code source sur GitHub"></i>
                 </a>
+            </div>
+
+            <div class="modal fade" id="api-modal" tabindex="-1" role="dialog" aria-labelledby="api-modal" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Interface de programmation (API)</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body text-left">
+                            <p>
+                                Le service peut également être utilisé au travers de son API, qui est décrite ici.
+                            </p>
+
+                            <h5>Généralités</h5>
+
+                            <p>
+                                Le domaine racine (endpoint) est le suivant : <kbd>https://insee.arbre.app</kbd>
+                            </p>
+                            <p>
+                                Les résultats sont retournés au format json.
+                            </p>
+                            <p>
+                                Il n'y a pas besoin de s'authentifier ; l'accès est libre et ne nécessite pas de jeton.
+                                Pour le bon fonctionnement des services il vous est demandé de ne pas abuser de l'API : essayez de rester au dessous des 3600 requêtes par heure et par adresse IP.
+                                Privilégiez par ailleurs la définition d'un champ <code>User-Agent</code> explicite (même si cela n'est pas requis).
+                            </p>
+
+                            <h5>Recherche de fiches</h5>
+
+                            <p>
+                                Permet de lancer une recherche parmi les fiches individuelles.
+                            </p>
+                            <p>
+                                <strong>Méthode</strong> <kbd>/persons</kbd> (<em>GET</em>)
+                            </p>
+
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Paramètre</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Type de valeur</th>
+                                        <th scope="col">Valeur par défaut</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>surname</code></td>
+                                        <td>Nom(s) de famille</td>
+                                        <td>Chaîne</td>
+                                        <td>(paramètre requis)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>name</code></td>
+                                        <td>Prénom(s)</td>
+                                        <td>Chaîne</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>place</code></td>
+                                        <td>Identifiant du lieu<sup>*</sup></td>
+                                        <td>Entier positif</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>event</code></td>
+                                        <td>Type d'événement</td>
+                                        <td><code>birth</code> ou <code>death</code></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>after</code></td>
+                                        <td>Borne inférieure de l'année</td>
+                                        <td>Année</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>before</code></td>
+                                        <td>Borne supérieure de l'année</td>
+                                        <td>Année</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>order</code></td>
+                                        <td>Ordre de tri</td>
+                                        <td><code>ascending</code> ou <code>descending</code></td>
+                                        <td><code>ascending</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>offset</code></td>
+                                        <td>Décalage</td>
+                                        <td>Entier positif</td>
+                                        <td><code>0</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>limit</code></td>
+                                        <td>Limite</td>
+                                        <td>Entier de <code>0</code> à <code>100</code></td>
+                                        <td><code>10</code></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <p><sup>*</sup> : voir plus bas.</p>
+
+                            <p>
+                                Exemple : <kbd>https://insee.arbre.app/persons?surname=chirac&name=jacques%20rené</kbd>
+                            </p>
+                            <pre><code>
+{
+  "code": 200,
+  "count": 1,
+  "results": [
+    {
+      "birthDate": "1932-11-29",
+      "birthPlace": "Paris 5e Arrondissement, Paris, Île-de-France, France",
+      "deathDate": "2019-09-26",
+      "deathPlace": "Paris 6e Arrondissement, Paris, Île-de-France, France",
+      "gender": true,
+      "nom": "CHIRAC",
+      "prenom": "Jacques René"
+    }
+  ]
+}
+                                </code></pre>
+
+                            <h5>Recherche de lieux</h5>
+
+                            <p>
+                                Permet d'obtenir l'identifiant d'un lieu.
+                            </p>
+
+                            <p>
+                                <strong>Méthode</strong> <kbd>/places</kbd> (<em>GET</em>)
+                            </p>
+
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Paramètre</th>
+                                        <th scope="col">Description</th>
+                                        <th scope="col">Type de valeur</th>
+                                        <th scope="col">Valeur par défaut</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>prefix</code></td>
+                                        <td>Recherche</td>
+                                        <td>Chaîne</td>
+                                        <td>(paramètre requis)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>limit</code></td>
+                                        <td>Limite</td>
+                                        <td>Entier de <code>0</code> à <code>25</code></td>
+                                        <td><code>10</code></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <p>
+                                Exemple : <kbd>https://insee.arbre.app/places?prefix=paris&limit=3</kbd>
+                            </p>
+                            <pre><code>
+{
+  "code": 200,
+  "results": [
+    {
+      "fullname": "Paris, Île-de-France, France",
+      "id": 99
+    },
+    {
+      "fullname": "Paris 14e Arrondissement, Paris, Île-de-France, France",
+      "id": 108
+    },
+    {
+      "fullname": "Paris 15e Arrondissement, Paris, Île-de-France, France",
+      "id": 103
+    }
+  ]
+}
+                                </code></pre>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </body>

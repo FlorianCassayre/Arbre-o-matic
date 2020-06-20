@@ -7,10 +7,10 @@ import './scss/insee.scss'
 
 import {dom, library} from '@fortawesome/fontawesome-svg-core'
 
-import { faBook, faFileCsv, faFileDownload, faFilter, faInfoCircle, faLink, faLongArrowAltLeft, faMars, faSearch, faSort, faVenus, faUndoAlt } from '@fortawesome/free-solid-svg-icons'
+import { faBook, faFileCsv, faFileDownload, faFilter, faInfoCircle, faLink, faLongArrowAltLeft, faMars, faSearch, faSort, faVenus, faUndoAlt, faExclamationCircle, faWrench } from '@fortawesome/free-solid-svg-icons'
 import {faGithub} from '@fortawesome/free-brands-svg-icons'
 
-library.add(faBook, faSearch, faMars, faVenus, faInfoCircle, faLongArrowAltLeft, faFileDownload, faFileCsv, faFilter, faSort, faLink, faUndoAlt);
+library.add(faBook, faSearch, faMars, faVenus, faInfoCircle, faLongArrowAltLeft, faFileDownload, faFileCsv, faFilter, faSort, faLink, faUndoAlt, faExclamationCircle, faWrench);
 
 library.add(faGithub);
 
@@ -378,6 +378,10 @@ $('document').ready(function() {
 
 $('#help').on('click', function () { // Help button
     $('#help-modal').modal('show');
+});
+
+$('#api').on('click', function () { // API button
+    $('#api-modal').modal('show');
 });
 
 $('#download-csv').on('click', function (e) {
