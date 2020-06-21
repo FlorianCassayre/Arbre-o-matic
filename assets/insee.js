@@ -269,7 +269,32 @@ reset.click(function(e) {
     resetForm();
 });
 
-let surname = '', name = '', place = 0, event = '', after = '', before = '', order = '';
+let surname = '', name = '', place = 0, event = '', after = '', before = '', dateKind = '', order = '';
+
+function updateDateKind(value) {
+    const eAfter = $('#after'), eBefore = $('#before'), eExact = $('#exact');
+    const toShow = [], toHide = [];
+    if(value === 'range') {
+        toShow.push(eAfter);
+        toShow.push(eBefore);
+        toHide.push(eExact);
+    } else {
+        toShow.push(eExact);
+        toHide.push(eAfter);
+        toHide.push(eBefore);
+    }
+    toShow.forEach(e => {
+        e.val('');
+        e.removeClass('hidden');
+    });
+    toHide.forEach(e => {
+        e.addClass('hidden');
+    })
+}
+
+$('#date-kind').on('change', function() {
+    updateDateKind(this.value);
+});
 
 function updateResults() {
     const offset = currentPage * resultsPerPage, limit = resultsPerPage;
@@ -300,8 +325,14 @@ $('#search').click(function(e) {
     name = $('#name').val();
     place = placeSelect.val();
     event = $('#event').val();
-    after = $('#after').val();
-    before = $('#before').val();
+    dateKind = $('#date-kind').val();
+    if(dateKind === 'range') {
+        after = $('#after').val();
+        before = $('#before').val();
+    } else {
+        after = $('#exact').val();
+        before = after;
+    }
     order = $('#order').val();
 
     surnameElement.removeClass('is-invalid');
@@ -453,7 +484,7 @@ function getHashParameters() {
     return result;
 }
 
-const P_SURNAME = 's', P_NAME = 'n', P_PLACE = 'p', P_EVENT = 'e', P_AFTER = 'a', P_BEFORE = 'b', P_ORDER = 'o', P_PAGE = 'k', P_LIMIT = 'l';
+const P_SURNAME = 's', P_NAME = 'n', P_PLACE = 'p', P_EVENT = 'e', P_AFTER = 'a', P_BEFORE = 'b', P_EXACT = 'y', P_ORDER = 'o', P_PAGE = 'k', P_LIMIT = 'l';
 const V_BIRTH = 'b', V_DEATH = 'd', V_ASCEND = 'a', V_DESCEND = 'd';
 
 function getPermalink() {
@@ -476,11 +507,17 @@ function getPermalink() {
     }
     if(after.length > 0 || before.length > 0 || event !== 'birth' || order !== 'ascending') {
         add(P_EVENT, event === 'birth' ? V_BIRTH : V_DEATH);
-        if(after.length > 0) {
-            add(P_AFTER, after);
-        }
-        if(before.length > 0) {
-            add(P_BEFORE, before);
+        if(dateKind === 'range') {
+            if(after.length > 0) {
+                add(P_AFTER, after);
+            }
+            if(before.length > 0) {
+                add(P_BEFORE, before);
+            }
+        } else {
+            if(after.length > 0) {
+                add(P_EXACT, after);
+            }
         }
         add(P_ORDER, order === 'ascending' ? V_ASCEND : V_DESCEND);
     }
@@ -506,7 +543,7 @@ function loadPermalink() {
         return n !== Infinity && String(n) === str && n >= 0;
     }
 
-    const surname = get(P_SURNAME), name = get(P_NAME), placePrefix = get(P_PLACE), event = get(P_EVENT), after = get(P_AFTER), before = get(P_BEFORE), order = get(P_ORDER), page = get(P_PAGE), limit = get(P_LIMIT);
+    const surname = get(P_SURNAME), name = get(P_NAME), placePrefix = get(P_PLACE), event = get(P_EVENT), after = get(P_AFTER), before = get(P_BEFORE), exact = get(P_EXACT), order = get(P_ORDER), page = get(P_PAGE), limit = get(P_LIMIT);
 
     if(surname.trim().length > 0) {
         const hasPlace = placePrefix.trim().length > 0;
@@ -539,6 +576,12 @@ function loadPermalink() {
         if(event === V_BIRTH || event === V_DEATH) {
             const eventKey = event === V_BIRTH ? 'birth' : 'death';
             $(`select#event > option[value="${eventKey}"]`).prop('selected', true);
+        }
+        const dateKindKey = exact.length > 0 && after.length === 0 && before.length === 0 ? 'exact' : 'range';
+        $(`select#date-kind > option[value="${dateKindKey}"]`).prop('selected', true);
+        updateDateKind(dateKindKey);
+        if(isNormalInteger(exact)) {
+            $('#exact').val(exact);
         }
         if(isNormalInteger(after)) {
             $('#after').val(after);

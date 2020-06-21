@@ -80,11 +80,13 @@
 
                         <div class="col-4">
                             <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">Entre</span>
-                                </div>
+                                <select class="form-control" id="date-kind">
+                                    <option value="range">Entre</option>
+                                    <option value="exact">En</option>
+                                </select>
                                 <input type="number" id="after" class="form-control" aria-label="Année de début" placeholder="Début" min="0" max="2020">
                                 <input type="number" id="before" class="form-control" aria-label="Année de début" placeholder="Fin" min="0" max="2020">
+                                <input type="number" id="exact" class="form-control hidden" aria-label="Année exacte" placeholder="Année" min="0" max="2020">
                             </div>
                         </div>
 
@@ -94,9 +96,9 @@
                                     <span class="input-group-text"><i class="fas fa-sort"></i></span>
                                 </div>
                                 <select class="form-control" id="order">
-                                <option value="ascending">Croissant</option>
-                                <option value="descending">Décroissant</option>
-                            </select>
+                                    <option value="ascending">Croissant</option>
+                                    <option value="descending">Décroissant</option>
+                                </select>
                             </div>
 
                         </div>
