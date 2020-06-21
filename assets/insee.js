@@ -173,7 +173,7 @@ function displayResults(data, offset, limit) {
     const tableDiv = $('#table-container');
     tableDiv.removeClass('hidden');
 
-    $('tbody').remove(); // Remove current content
+    tableDiv.find('tbody').remove(); // Remove current content
 
     const table = $('#persons');
 
@@ -188,10 +188,57 @@ function displayResults(data, offset, limit) {
     table.removeClass('hidden');
     nav.removeClass('hidden');
     noResults.addClass('hidden');
+
     if(data.count === 0) { // No results
         table.addClass('hidden');
         nav.addClass('hidden');
         noResults.removeClass('hidden');
+    }
+
+    // Warnings
+    const warnings = [];
+
+    const container = $('#warning-container');
+    container.empty();
+
+    function containsSpecial(str) {
+        const specialCharacters = "*_\"?|";
+        for(let i = 0; i < specialCharacters.length; i++) {
+            if(str.includes(specialCharacters[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    if(containsSpecial(name) || containsSpecial(surname)) {
+        warnings.push("Les noms recherchés contiennent des caractères spéciaux ; ceux-ci ont été ignorés");
+    }
+    if(event === 'birth') {
+        const minBirth = 1850;
+        if(before !== '0' && parseInt(before) < minBirth) {
+            warnings.push("La date de naissance est trop reculée");
+        }
+    } else {
+        const minDeath = 1970;
+        if(before !== '0' && parseInt(before) < minDeath) {
+            warnings.push("La date de décès est antérieure à 1970");
+        }
+    }
+
+    if(warnings.length > 0) {
+        console.log("WARN");
+        const alert = $('#warning-template > #warning-alert');
+        const alertCopy = alert.clone();
+        const list = alertCopy.find('#warning-list');
+
+        list.empty();
+        warnings.forEach(warning => {
+            const li = $("<li></li>").text(warning);
+            list.append(li);
+        });
+
+        container.html(alertCopy);
     }
 
     if(data.count > 0 && data.count <= 100) {
@@ -257,11 +304,14 @@ function resetForm() {
     placeSelect.empty();
     placeSelect.selectpicker('refresh');
     $('#event').val('birth');
+    $(`select#date-kind > option[value="range"]`).prop('selected', true);
+    updateDateKind('range');
     $('#after').val('');
     $('#before').val('');
     $('#order').val('ascending');
     $('#reset').addClass('hidden');
     $('#table-container').addClass('hidden');
+    $('#warning-container').empty();
 }
 
 reset.click(function(e) {
