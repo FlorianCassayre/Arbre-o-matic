@@ -7,10 +7,10 @@ import './scss/insee.scss'
 
 import {dom, library} from '@fortawesome/fontawesome-svg-core'
 
-import { faBook, faFileCsv, faFileDownload, faFilter, faInfoCircle, faLink, faLongArrowAltLeft, faMars, faSearch, faSort, faVenus, faUndoAlt, faExclamationCircle, faWrench } from '@fortawesome/free-solid-svg-icons'
+import { faBook, faFileCsv, faFileDownload, faFilter, faInfoCircle, faLink, faLongArrowAltLeft, faMars, faSearch, faSort, faVenus, faUndoAlt, faExclamationCircle, faWrench, faGlobe } from '@fortawesome/free-solid-svg-icons'
 import {faGithub} from '@fortawesome/free-brands-svg-icons'
 
-library.add(faBook, faSearch, faMars, faVenus, faInfoCircle, faLongArrowAltLeft, faFileDownload, faFileCsv, faFilter, faSort, faLink, faUndoAlt, faExclamationCircle, faWrench);
+library.add(faBook, faSearch, faMars, faVenus, faInfoCircle, faLongArrowAltLeft, faFileDownload, faFileCsv, faFilter, faSort, faLink, faUndoAlt, faExclamationCircle, faWrench, faGlobe);
 
 library.add(faGithub);
 
@@ -20,16 +20,16 @@ dom.watch(); // Important because we are dynamically adding icons
 
 // ---
 
-const HOST_API = "https://insee.arbre.app/", HOST_FRONT = "https://arbre.app/insee";
+const HOST_API = "https://insee.arbre.app/", HOST_FRONT = (location.protocol + '//' + location.host + location.pathname).replace(/\/$/, "");
 
 let currentPage = 0, resultsPerPage = 25;
 let preservePage = false;
 
 const placeSelect = $('#place');
 placeSelect.selectpicker({
-    noneSelectedText : 'Lieu (commune, département, région ou pays)',
-    noneResultsText: 'Aucun lieu trouvé',
-    liveSearchPlaceholder: 'Commune, département, région ou pays'
+    noneSelectedText : __('insee.none_selected_text'),
+    noneResultsText: __('insee.no_place_found'),
+    liveSearchPlaceholder: __('insee.place_kind')
 });
 
 $('.bs-searchbox > input').attr('autocomplete', 'random'); // Disable autocomplete
@@ -165,10 +165,10 @@ function displayResults(data, offset, limit) {
     if(totalPages === 0 || currentPage === totalPages - 1) rightArrow.addClass('disabled'); else rightArrow.removeClass('disabled');
 
 
-    $('#count').text(data.count.toLocaleString('FR-fr') + ' résultat' + (data.count > 1 ? 's' : ''));
+    $('#count').text(data.count.toLocaleString('FR-fr') + ' ' + (data.count > 1 ? __('insee.results') : __('insee.result')));
 
     // Math.max to address totalPages == 0
-    $('#page-info').text(`Page ${currentPage + 1} sur ${Math.max(totalPages, 1)}`);
+    $('#page-info').text(__('insee.page') + ' ' + (currentPage + 1) + ' ' + __('insee.of') + ' ' + Math.max(totalPages, 1));
 
     const tableDiv = $('#table-container');
     tableDiv.removeClass('hidden');
@@ -212,17 +212,17 @@ function displayResults(data, offset, limit) {
     }
 
     if(containsSpecial(name) || containsSpecial(surname)) {
-        warnings.push("Les noms recherchés contiennent des caractères spéciaux ; ceux-ci ont été ignorés");
+        warnings.push(__("insee.warnings.special_characters"));
     }
     if(event === 'birth') {
         const minBirth = 1850;
         if(before !== '0' && parseInt(before) < minBirth) {
-            warnings.push("La date de naissance est trop reculée");
+            warnings.push(__("insee.warnings.early_birth"));
         }
     } else {
         const minDeath = 1970;
         if(before !== '0' && parseInt(before) < minDeath) {
-            warnings.push("La date de décès est antérieure à 1970");
+            warnings.push(__("insee.warnings.early_death"));
         }
     }
 
@@ -272,8 +272,8 @@ function displayResults(data, offset, limit) {
             genderIcon = female;
         }
         const fieldsShared = [genderIcon, row.nom.toUpperCase(), row.prenom];
-        const fieldsFirst = ['Naissance' , date(row.birthDate), row.birthPlace];
-        const fieldsSecond = ['Décès', date(row.deathDate), row.deathPlace];
+        const fieldsFirst = [__('insee.birth') , date(row.birthDate), row.birthPlace];
+        const fieldsSecond = [__('insee.death'), date(row.deathDate), row.deathPlace];
         let first = true;
         fieldsShared.forEach(f => {
             const row = $(`<td rowspan="2" class="${first ? 'text-center' : ''}"></td>`);
@@ -440,7 +440,7 @@ function failureFallback(xhr, status, error) {
         if(json.hasOwnProperty('information')) { // A message is available
             message = json.information;
         } else { // No message provided
-            message = 'Le serveur n\'est actuellement pas en mesure de traiter votre requête.';
+            message = __('insee.default_server_message');
         }
 
         content.text(message);
@@ -457,12 +457,14 @@ $('document').ready(function() {
     $('[data-toggle=tooltip]').tooltip(); // Tooltips
 });
 
-$('#help').on('click', function () { // Help button
+$('#help').on('click', function (e) { // Help button
     $('#help-modal').modal('show');
+    e.preventDefault();
 });
 
-$('#api').on('click', function () { // API button
+$('#api').on('click', function (e) { // API button
     $('#api-modal').modal('show');
+    e.preventDefault();
 });
 
 $('#download-csv').on('click', function (e) {
@@ -487,7 +489,8 @@ $('#download-csv').on('click', function (e) {
     getPersons(0, 100, surname, name, place, event, after, before, order)
         .done(function(data) {
             const lines = [];
-            lines.push(['sexe', 'noms', 'prenoms', 'date_naissance', 'lieu_naissance', 'date_deces', 'lieu_deces']);
+            lines.push([__('insee.csv_fields.gender'), __('insee.csv_fields.surname'), __('insee.csv_fields.given'),
+                __('insee.csv_fields.birth_date'), __('insee.csv_fields.birth_place'), __('insee.csv_fields.death_date'), __('insee.csv_fields.death_place')]);
 
             data.results.forEach(r => {
                 lines.push([r.gender ? 'M' : 'F', r.nom, r.prenom, r.birthDate, r.birthPlace, r.deathDate, r.deathPlace]);
@@ -503,7 +506,7 @@ $('#download-csv').on('click', function (e) {
 
             const parts = [surname, name].map(s => s.trim()).filter(s => s.length > 0);
 
-            downloadContent(csv, sanitize(`Export recherche '${parts.join(' ')}' (arbre.app - INSEE).csv`), 'text/csv');
+            downloadContent(csv, sanitize(__('insee.search_export') + ` '${parts.join(' ')}' (arbre.app - INSEE).csv`), 'text/csv');
         })
         .fail(function () {
             console.log("Impossible d'effectuer la requête");

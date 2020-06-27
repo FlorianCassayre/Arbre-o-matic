@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="${locale}">
+    <head>
+        <meta charset="UTF-8">
+        <title>arbre.app - <%=__('home.title')%></title>
+
+        <meta name="language" content="${locale}">
+        <meta http-equiv="content-language" content="${lang}">
+
+        <meta name="author" content="Florian Cassayre">
+
+        <meta name="robots" content="index, follow">
+
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:site" content="@flomine68">
+        <meta name="twitter:title" content="arbre.app">
+        <meta name="twitter:description" content="${__('home.title')}">
+        <!--<meta name="twitter:image" content="">-->
+        <meta name="twitter:creator" content="@flomine68">
+
+        <meta property="og:title" content="arbre.app">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="${urlGenerator('')}">
+        <!--<meta property="og:image" content="">-->
+        <meta property="og:description" content="${__('home.title')}">
+        <meta property="og:site_name" content="arbre.app">
+
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
+        <link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
+        <link rel="manifest" href="/manifest.json">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+        <meta name="theme-color" content="#ffffff">
+    </head>
+    <body>
+        <div class="dropdown" style="position: absolute; top: 10px; right: 10px;">
+            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-globe" aria-hidden="true"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                <h6 class="dropdown-header"><%=__('common.language')%></h6>
+                <a class="dropdown-item ${lang === 'fr' ? 'active' : ''}" href="${urlGeneratorLang('fr', '')}">Français</a>
+                <a class="dropdown-item ${lang === 'en' ? 'active' : ''}" href="${urlGeneratorLang('en', '')}">English</a>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="text-center">
+                <i class="fas fa-leaf fa-4x"></i>
+                <h1 class="mt-4"><span style="color: #47b751">arbre</span><span class="font-weight-normal">.app</span></h1>
+                <span class="font-italic"><%=__('home.title')%></span>
+            </div>
+
+            <div class="row mt-4">
+
+                <div class="service col-5 offset-1" data-url="arbreomatic">
+                    <div class="card">
+                        <img src="/cover_arbreomatic.png" class="card-img-top" alt="${__('home.arbreomatic.image_alt')}">
+                        <div class="card-body">
+                            <h5 class="card-title"><%=__('home.arbreomatic.title')%></h5>
+                            <p class="card-text"><%=__('home.arbreomatic.description')%></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="service col-5" data-url="insee">
+                    <div class="card">
+                        <img src="/cover_insee.png" class="card-img-top" alt="${__('home.insee.image_alt')}">
+                        <div class="card-body">
+                            <h5 class="card-title"><%=__('home.insee.title')%> <span class="badge badge-info"><%=__('common.new')%></span></h5>
+                            <p class="card-text"><%=__('home.insee.description')%></p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </body>
+</html>

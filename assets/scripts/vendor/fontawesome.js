@@ -1,8 +1,8 @@
 import { library, dom } from '@fortawesome/fontawesome-svg-core'
 
 
-import { faSpinner, faPlus, faMinus, faFolderOpen, faPrint, faDownload, faArrowsAlt, faExclamationTriangle, faQuestionCircle, faLongArrowAltLeft } from '@fortawesome/free-solid-svg-icons'
-library.add(faSpinner, faPlus, faMinus, faFolderOpen, faPrint, faDownload, faArrowsAlt, faExclamationTriangle, faQuestionCircle, faLongArrowAltLeft);
+import { faSpinner, faPlus, faMinus, faFolderOpen, faPrint, faDownload, faArrowsAlt, faExclamationTriangle, faQuestionCircle, faLongArrowAltLeft, faGlobe } from '@fortawesome/free-solid-svg-icons'
+library.add(faSpinner, faPlus, faMinus, faFolderOpen, faPrint, faDownload, faArrowsAlt, faExclamationTriangle, faQuestionCircle, faLongArrowAltLeft, faGlobe);
 
 import { faDotCircle, faFilePdf, faFileCode, faFileImage } from '@fortawesome/free-regular-svg-icons'
 library.add(faDotCircle, faFilePdf, faFileCode, faFileImage);

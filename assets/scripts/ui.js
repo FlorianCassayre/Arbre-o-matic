@@ -41,7 +41,7 @@ drawLogo();
 // Select picker
 const individualSelect = $('#individual-select');
 individualSelect.selectpicker({
-    noneSelectedText : 'Aucun individu sélectionné'
+    noneSelectedText : __('arbreomatic.no_individual_selected')
 });
 
 
@@ -240,7 +240,7 @@ function onSettingChange() {
         return false;
     }
 
-    filename = ('Généalogie' + (result.name || result.surname ? ' ' : '') + (result.name ? result.name : '')
+    filename = (__('arbreomatic.genealogy') + (result.name || result.surname ? ' ' : '') + (result.name ? result.name : '')
         + (result.name && result.surname ? ' ' : '') + (result.surname ? result.surname : '')
         + ' - Arbre-o-matic')
         .replace(/[|&;$%@"<>()+,]/g, ''); // Filename sanitizing (from: https://stackoverflow.com/a/3780731/4413709)
@@ -385,8 +385,8 @@ function generatePdf(callback) {
         info: {
             Title: filename, // Title of the document
             Author: 'Arbre-o-matic', // Name of the author
-            Subject: 'Éventail généalogique', // Subject of the document
-            Keywords: 'généalogie;arbre;éventail;arbre-o-matic', // Keywords
+            Subject: __('arbreomatic.genealogical_fan'), // Subject of the document
+            Keywords: 'généalogie;arbre;éventail;arbre-o-matic', // Keywords (no translation)
             //CreationDate: 'DD/MM/YYYY', // Date created (added automatically by PDFKit)
             //ModDate: 'DD/MM/YYYY' // Date last modified
         }
@@ -506,7 +506,7 @@ function loadExternal(url) {
             const data = xhr.response;
             onFileChange(data);
         } else {
-            window.alert("Impossible de charger le fichier"); // FIXME
+            window.alert(__('arbreomatic.cannot_read_this_file')); // FIXME
         }
     };
     xhr.send();

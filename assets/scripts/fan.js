@@ -9,7 +9,7 @@ function drawFan(json, config) {
 
     const data = Parse.buildHierarchy(json, config);
     if(data == null) {
-        window.alert("Impossible d'interpréter ce fichier");
+        window.alert(__('arbreomatic.cannot_read_this_file'));
         return null;
     }
 
