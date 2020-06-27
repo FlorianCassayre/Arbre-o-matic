@@ -38,7 +38,7 @@
     "bootstrap-colorpicker": "^3.1.2",
     "bootstrap-select": "^1.13.10",
     "d3": "^5.11.0",
-    "jquery": "^3.4.0",
+    "jquery": "^3.5.0",
     "panzoom": "^8.1.2",
     "parse-gedcom": "^1.0.5",
     "pdfkit": "^0.10.0",
