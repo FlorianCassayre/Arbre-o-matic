@@ -52,7 +52,7 @@ limitSelect.on('change', function () {
 });
 
 let placeRequestIndex = 1, lastReceived = 0;
-jQuery("select#place").siblings().find("input[type='text']").keyup(function (e) {
+jQuery("select#place").siblings().find("input[type='search']").keyup(function (e) {
     const search = $(this).val();
 
     const requestIndex = placeRequestIndex;
