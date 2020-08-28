@@ -7,7 +7,7 @@ const map = $('#map');
 $('document').ready(function() {
     $('[data-toggle=tooltip]').tooltip(); // Tooltips
 
-    $('#map').load('../france.svg', function() {
+    $('#map').load('/france.svg', function() {
         const div = d3.select($(this)[0]);
         const svg = div.select('svg');
         svg.style('overflow', 'visible');
