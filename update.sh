@@ -21,3 +21,4 @@ npm run prod
 # Set newly built artifact to production
 rm -rf production
 mv dist production
+
