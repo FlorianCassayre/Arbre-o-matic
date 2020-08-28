@@ -1,5 +1,5 @@
 // JavaScript
-import './scripts/main'
+import './scripts/arbreomatic/main'
 
 // Styles
 import './scss/main.scss'

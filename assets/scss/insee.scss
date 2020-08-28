@@ -22,9 +22,7 @@ div.container {
 }
 
 div.contents {
-    margin-top: 20px;
     background-color: white;
-
     border: 1px solid rgba(0, 0, 0, .125);
     border-radius: .25rem;
     box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
@@ -59,4 +57,12 @@ input[readonly]{
 .popover{
   width: 500px;
   max-width: 100%; /* Max Width of the popover (depending on the container!) */
+}
+
+.contents.tab-content {
+  border-top-left-radius: 0;
+}
+
+.tooltip-inner {
+  white-space: pre-wrap; /* Tooltip follows line breaks */
 }

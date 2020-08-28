@@ -52,7 +52,7 @@
                 <h2 class="mt-4"><%=__('insee.title')%></h2>
             </div>
 
-            <div class="contents">
+            <div class="contents" style="margin-top: 20px;">
                 <p>
                     <%=__('insee.search_in')%>
                 </p>
@@ -138,93 +138,136 @@
                 </div>
             </div>
 
-            <div id="warning-container">
+            <div id="warnings-container">
 
             </div>
 
-            <div class="contents hidden" id="table-container" style="padding-top: 10px; padding-bottom: 10px; padding-left: 0; padding-right: 0">
-                <div class="row">
-                    <div class="col-4">
-                        <div style="padding-left: 10px;">
-                            <div id="popover-content" class="hidden">
-                                <div class="input-group">
-                                    <input type="text" class="form-control link" readonly>
-                                    <!--<div class="input-group-append">
-                                        <button class="btn btn-outline-secondary copy" type="button">Copier</button>
-                                    </div>-->
+
+            <div class="hidden" id="content-container" style="margin-top: 10px;">
+                <ul class="nav nav-tabs" id="tabs" role="tablist" style="border-bottom: none;">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="results-tab" href="#results-content" data-toggle="tab" role="tab" aria-controls="results-content" aria-selected="true">Résultats</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="statistics-tab" href="#statistics-content" data-toggle="tab" role="tab" aria-controls="statistics-content" aria-selected="false">Statistiques</a>
+                    </li>
+                </ul>
+                <div style="float: left; padding-left: 10px; padding-top: 11px;">
+                    <div id="popover-content" class="hidden">
+                        <div class="input-group">
+                            <input type="text" class="form-control link" readonly>
+                            <!--<div class="input-group-append">
+                                <button class="btn btn-outline-secondary copy" type="button">Copier</button>
+                            </div>-->
+                        </div>
+                    </div>
+                    <button type="button" id="permalink" class="btn btn-info mr-1"
+                            data-placement="top"
+                            data-toggle="popover"
+                            title="${__('insee.permalink_to_this')}">
+                        <i class="fas fa-link"></i>
+                    </button>
+
+                </div>
+                <div class="contents tab-content" style="padding-top: 10px; padding-bottom: 10px; padding-left: 0; padding-right: 0;">
+                    <div id="results-content" class="tab-pane fade show active" role="tabpanel" aria-labelledby="results-tab">
+                        <div class="row">
+                            <div class="col-4" style="padding-left: 4px;">
+                                <div class="btn-group" id="download-tooltip" data-toggle="tooltip" data-placement="top" title="${__('insee.exportation_only_available')}">
+                                    <button type="button" id="download-button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-file-download fa-fw"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <h6 class="dropdown-header"><%=__('insee.available_formats')%></h6>
+                                        <a class="dropdown-item" href="#" id="download-csv">
+                                            <i class="fas fa-file-csv fa-fw"></i>
+                                            <%=__('insee.csv_format')%>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                            <button type="button" id="permalink" class="btn btn-info mr-1"
-                                    data-placement="top"
-                                    data-toggle="popover"
-                                    title="${__('insee.permalink_to_this')}">
-                                <i class="fas fa-link"></i>
-                            </button>
+                            <div class="col-8" style="padding-right: 0;">
+                                <div id="results-texts" class="text-right align-middle" style="padding-right: 10px;">
+                                    <span class="font-weight-bold count"></span>
+                                    &#183;
+                                    <span id="page-info"></span>
+                                    &#183;
+                                    <%=__('insee.results_per_page')%>
+                                    <select id="limit" class="selectpicker w-auto">
+                                        <option value="25" selected>25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
 
-                            <div class="btn-group" id="download-tooltip" data-toggle="tooltip" data-placement="top" title="${__('insee.exportation_only_available')}">
-                                <button type="button" id="download-button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-file-download fa-fw"></i>
-                                </button>
-                                <div class="dropdown-menu">
-                                    <h6 class="dropdown-header"><%=__('insee.available_formats')%></h6>
-                                    <a class="dropdown-item" href="#" id="download-csv">
-                                        <i class="fas fa-file-csv fa-fw"></i>
-                                        <%=__('insee.csv_format')%>
+
+                        <div id="no-results" class="text-center mt-2 hidden">
+                            <h5><%=__('common.no_result')%></h5>
+                            <p class="font-italic"><%=__('insee.try_different_query')%></p>
+                        </div>
+                        <table class="table mt-2" id="persons">
+                            <thead>
+                            <tr style="border-top: hidden">
+                                <th scope="col"><%=__('insee.person.gender')%></th>
+                                <th scope="col"><%=__('insee.person.surname')%></th>
+                                <th scope="col"><%=__('insee.person.given')%></th>
+                                <th scope="col"><%=__('insee.person.event')%></th>
+                                <th scope="col"><%=__('insee.person.date')%></th>
+                                <th scope="col"><%=__('insee.person.place')%></th>
+                            </tr>
+                            </thead>
+                        </table>
+                        <nav aria-label="Navigation">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item navigation-arrow">
+                                    <a class="page-link left-arrow" href="#" aria-label="${__('common.previous')}">
+                                        <span aria-hidden="true">&laquo;</span>
+                                        <span class="sr-only"><%=__('common.previous')%></span>
                                     </a>
-                                </div>
+                                </li>
+                                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item navigation-arrow">
+                                    <a class="page-link right-arrow" href="#" aria-label="${__('common.next')}">
+                                        <span aria-hidden="true">&raquo;</span>
+                                        <span class="sr-only"><%=__('common.next')%></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+
+                    <div id="statistics-content" class="tab-pane fade" role="tabpanel" aria-labelledby="statistics-tab" style="padding-left: 10px; padding-right: 10px;">
+                        <div class="col-8 offset-4" style="padding: 0;">
+                            <div class="text-right align-middle">
+                                <!--<span class="font-weight-bold count"></span>
+                                &#183;-->
+                                <span id="count-events">?</span> lieux
+                                <!--&#183;
+                                <a href="#">
+                                    <i class="fas fa-info-circle fa-fw"></i>
+                                </a>-->
                             </div>
                         </div>
-                    </div>
-                    <div class="col-8">
-                        <div class="text-right align-middle" style="padding-right: 10px;">
-                            <span class="font-weight-bold" id="count"></span>
-                            &#183;
-                            <span id="page-info"></span>
-                            &#183;
-                            <%=__('insee.results_per_page')%>
-                            <select id="limit" class="selectpicker w-auto">
-                                <option value="25" selected>25</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select>
+
+                        <div id="time" class="col-6 offset-3">
+
                         </div>
+
+                        <div class="text-center">
+                            <h4>Répartition géographique</h4>
+                            Pour les noms "<em id="surname-name"></em>", toutes périodes confondues
+                        </div>
+                        <div id="map" class="col-md-6 offset-md-3 col-xs-12 my-4">
+
+                        </div>
+                        <!--<div id="time" class="col-6 offset-3" style="min-height: 100px;">
+
+                        </div>-->
                     </div>
                 </div>
 
-
-                <div id="no-results" class="text-center mt-2 hidden">
-                    <h5><%=__('common.no_result')%></h5>
-                    <p class="font-italic"><%=__('insee.try_different_query')%></p>
-                </div>
-                <table class="table mt-2" id="persons">
-                    <thead>
-                        <tr style="border-top: hidden">
-                            <th scope="col"><%=__('insee.person.gender')%></th>
-                            <th scope="col"><%=__('insee.person.surname')%></th>
-                            <th scope="col"><%=__('insee.person.given')%></th>
-                            <th scope="col"><%=__('insee.person.event')%></th>
-                            <th scope="col"><%=__('insee.person.date')%></th>
-                            <th scope="col"><%=__('insee.person.place')%></th>
-                        </tr>
-                    </thead>
-                </table>
-                <nav aria-label="Navigation">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item navigation-arrow">
-                            <a class="page-link left-arrow" href="#" aria-label="${__('common.previous')}">
-                                <span aria-hidden="true">&laquo;</span>
-                                <span class="sr-only"><%=__('common.previous')%></span>
-                            </a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item navigation-arrow">
-                            <a class="page-link right-arrow" href="#" aria-label="${__('common.next')}">
-                                <span aria-hidden="true">&raquo;</span>
-                                <span class="sr-only"><%=__('common.next')%></span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
             </div>
 
             <div class="modal fade" id="server-message" tabindex="-1" role="dialog" aria-labelledby="server-message-title" aria-hidden="true">
