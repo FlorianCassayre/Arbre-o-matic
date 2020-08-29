@@ -1,5 +1,6 @@
 {
   "common": {
+    "is_plural": "function(c){return c > 1;}",
     "new": "Nouveau",
     "loading_ellipsis": "Chargement...",
     "please_wait": "Merci de patienter quelques instants.",
@@ -289,6 +290,10 @@
     "method_places": {
       "search": "Recherche"
     },
+    "geographical_stats": "Statistiques géographiques",
+    "geographical_stats_description": "Permet d'obtenir des statistiques géographiques pour une recherche.",
+    "time_stats": "Statistiques par annuelles",
+    "time_stats_description": "Permet d'obtenir des statistiques par année pour une recherche.",
 
     "none_selected_text": "Lieu (commune, département, région ou pays)",
     "no_place_found": "Aucun lieu trouvé",
@@ -312,6 +317,12 @@
       "death_date": "date_deces",
       "death_place": "lieu_deces"
     },
-    "search_export": "Export recherche"
+    "search_export": "Export recherche",
+
+    "geographical_distribution": "Répartition géographique",
+    "for_the_names": "Pour les noms",
+    "all_times": "toutes périodes confondues",
+    "place_found": "lieu",
+    "places_found": "lieux"
   }
 }

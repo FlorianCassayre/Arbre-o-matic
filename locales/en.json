@@ -1,5 +1,6 @@
 {
   "common": {
+    "is_plural": "function(c){return c !== 1;}",
     "new": "New",
     "loading_ellipsis": "Loading...",
     "please_wait": "Please wait a few seconds.",
@@ -254,7 +255,7 @@
     "results_are_returned": "The results are returned in json format.",
     "no_authentication_required": "Authentication is not needed; access is free and does not require a token.",
     "soft_limitations": "For the good operation of the services you are asked to avoid abusing the API: please try to stay below 3600 requests per hour and per ip address.",
-    "user_agent": "You are also encouraged to use an explicit <code>User-Agent</code> field (even if this is not mendatory).",
+    "user_agent": "You are also encouraged to use an explicit <code>User-Agent</code> field (even if this is not mandatory).",
     "records_querying": "Records querying",
     "records_querying_description": "Performs a query among the individual records.",
     "method": "Method",
@@ -289,6 +290,10 @@
     "method_places": {
       "search": "Search"
     },
+    "geographical_stats": "Geographical statistics",
+    "geographical_stats_description": "Gather geographical statistics for a search query.",
+    "time_stats": "Annual statistics",
+    "time_stats_description": "Gather annual statistics for a search query.",
 
     "none_selected_text": "Place (town, department, region or country)",
     "no_place_found": "No matching place found",
@@ -312,6 +317,12 @@
       "death_date": "death_date",
       "death_place": "death_place"
     },
-    "search_export": "Export search results"
+    "search_export": "Export search results",
+
+    "geographical_distribution": "Geographical distribution",
+    "for_the_names": "For the names",
+    "all_times": "all times",
+    "place_found": "place",
+    "places_found": "places"
   }
 }

@@ -239,25 +239,23 @@
                     </div>
 
                     <div id="statistics-content" class="tab-pane fade" role="tabpanel" aria-labelledby="statistics-tab" style="padding-left: 10px; padding-right: 10px;">
-                        <div class="col-8 offset-4" style="padding: 0;">
-                            <div class="text-right align-middle">
-                                <!--<span class="font-weight-bold count"></span>
-                                &#183;-->
-                                <span id="count-events">?</span> lieux
-                                <!--&#183;
-                                <a href="#">
-                                    <i class="fas fa-info-circle fa-fw"></i>
-                                </a>-->
+                        <div class="row">
+                            <div class="col-8 offset-4" style="padding: 0; height: 40px;">
+                                <div class="text-right align-middle">
+                                    <!--<span class="font-weight-bold count"></span>
+                                    &#183;-->
+                                    <span id="count-events">? <%=__('insee.places_found')%></span>
+                                    <!--&#183;
+                                    <a href="#">
+                                        <i class="fas fa-info-circle fa-fw"></i>
+                                    </a>-->
+                                </div>
                             </div>
                         </div>
 
-                        <div id="time" class="col-6 offset-3">
-
-                        </div>
-
                         <div class="text-center">
-                            <h4>Répartition géographique</h4>
-                            Pour les noms "<em id="surname-name"></em>", toutes périodes confondues
+                            <h4><%=__('insee.geographical_distribution')%></h4>
+                            <%=__('insee.for_the_names')%> "<em id="surname-name"></em>", <%=__('insee.all_times')%>
                         </div>
                         <div id="map" class="col-md-6 offset-md-3 col-xs-12 my-4">
 
@@ -265,6 +263,7 @@
                         <!--<div id="time" class="col-6 offset-3" style="min-height: 100px;">
 
                         </div>-->
+
                     </div>
                 </div>
 
@@ -457,7 +456,7 @@
                             <p><sup>*</sup><%=__('insee.see_below')%></p>
 
                             <p>
-                                <%=__('insee.example')%> <kbd>https://insee.arbre.app/persons?surname=chirac&name=jacques%20rené</kbd>
+                                <%=__('insee.example')%> <kbd>https://insee.arbre.app/persons?surname=chirac&name=jacques+rené</kbd>
                             </p>
                             <pre><code>
 {
@@ -534,6 +533,130 @@
   ]
 }
                                 </code></pre>
+
+                            <h5><%=__('insee.geographical_stats')%></h5>
+
+                            <p>
+                                <%=__('insee.geographical_stats_description')%>
+                            </p>
+
+                            <p>
+                                <strong><%=__('insee.method')%></strong> <kbd>/stats/geography</kbd> (<em>GET</em>)
+                            </p>
+
+                            <table class="table table-sm">
+                                <thead>
+                                <tr>
+                                    <th scope="col"><%=__('insee.method_fields.parameter')%></th>
+                                    <th scope="col"><%=__('insee.method_fields.description')%></th>
+                                    <th scope="col"><%=__('insee.method_fields.value_type')%></th>
+                                    <th scope="col"><%=__('insee.method_fields.default_value')%></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td><code>surname</code></td>
+                                    <td><%=__('insee.method_persons.surname')%></td>
+                                    <td><%=__('insee.parameter_types.string')%></td>
+                                    <td><%=__('insee.parameter_types.required')%></td>
+                                </tr>
+                                <tr>
+                                    <td><code>name</code></td>
+                                    <td><%=__('insee.method_persons.given')%></td>
+                                    <td><%=__('insee.parameter_types.string')%></td>
+                                    <td></td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <p>
+                                <%=__('insee.example')%> <kbd>https://insee.arbre.app/stats/geography?surname=chirac&name=jacques</kbd>
+                            </p>
+                            <pre><code>
+{
+  "code": 200,
+  "results": [
+    {
+      "count": 1,
+      "name": "D-75"
+    },
+    {
+      "count": 1,
+      "name": "D-19"
+    },
+    {
+      "count": 1,
+      "name": "D-63"
+    }
+  ]
+}
+                            </code></pre>
+
+                            <h5><%=__('insee.time_stats')%></h5>
+
+                            <p>
+                                <%=__('insee.time_stats_description')%>
+                            </p>
+
+                            <p>
+                                <strong><%=__('insee.method')%></strong> <kbd>/stats/time</kbd> (<em>GET</em>)
+                            </p>
+
+                            <table class="table table-sm">
+                                <thead>
+                                <tr>
+                                    <th scope="col"><%=__('insee.method_fields.parameter')%></th>
+                                    <th scope="col"><%=__('insee.method_fields.description')%></th>
+                                    <th scope="col"><%=__('insee.method_fields.value_type')%></th>
+                                    <th scope="col"><%=__('insee.method_fields.default_value')%></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td><code>surname</code></td>
+                                    <td><%=__('insee.method_persons.surname')%></td>
+                                    <td><%=__('insee.parameter_types.string')%></td>
+                                    <td><%=__('insee.parameter_types.required')%></td>
+                                </tr>
+                                <tr>
+                                    <td><code>name</code></td>
+                                    <td><%=__('insee.method_persons.given')%></td>
+                                    <td><%=__('insee.parameter_types.string')%></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><code>place</code></td>
+                                    <td><%=__('insee.method_persons.place_id')%></td>
+                                    <td><%=__('insee.parameter_types.positive_integer')%></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><code>event</code></td>
+                                    <td><%=__('insee.method_persons.event_type')%></td>
+                                    <td><code>birth</code> <%=__('common.or')%> <code>death</code></td>
+                                    <td><code>birth</code></td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <p>
+                                <%=__('insee.example')%> <kbd>https://insee.arbre.app/stats/time?surname=chirac&name=jacques&event=birth</kbd>
+                            </p>
+                            <pre><code>
+{
+  "code": 200,
+  "results": [
+    {
+      "count": 1,
+      "name": "1926"
+    },
+    {
+      "count": 1,
+      "name": "1932"
+    }
+  ]
+}
+                            </code></pre>
                         </div>
                     </div>
                 </div>

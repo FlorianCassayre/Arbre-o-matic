@@ -3,6 +3,7 @@ import * as form from '../form';
 import * as api from '../api'
 import * as content from "../content";
 import * as warnings from "../warnings";
+import {pluralize} from "../utils";
 
 const table = $('#persons');
 
@@ -215,7 +216,7 @@ export function displayResults(data, offset, limit) {
 
     displayPagination(totalPages);
 
-    $('.count').text(data.count.toLocaleString('FR-fr') + ' ' + (data.count > 1 ? __('insee.results') : __('insee.result')));
+    $('.count').text(data.count.toLocaleString('FR-fr') + ' ' + pluralize(data.count, __('insee.result'), __('insee.results')));
 
     // Math.max to address totalPages == 0
     $('#page-info').text(__('insee.page') + ' ' + (form.currentPage + 1) + ' ' + __('insee.of') + ' ' + Math.max(totalPages, 1));

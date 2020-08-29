@@ -1,4 +1,5 @@
 import * as form from '../form';
+import {pluralize} from "../utils";
 
 const d3 = require('d3');
 
@@ -48,11 +49,12 @@ export function displayStatistics(data) {
     });
     departements.each(function() {
         const e = $(this);
-        const id = e.data('numerodepartement'), name = e.data('nom'), count = e.data('count').toLocaleString('FR-fr');
-        const title = `${name} (${id})\n${count} ${count > 1 ? __('insee.results') : __('insee.result')}`;
+        const countRaw = parseInt(e.data('count'));
+        const id = e.data('numerodepartement'), name = e.data('nom'), count = countRaw.toLocaleString('FR-fr');
+        const title = `${name} (${id})\n${count} ${pluralize(countRaw, __('insee.result'), __('insee.results'))}`;
         e.attr('title', title).attr('data-original-title', title);
     })
-    $('#count-events').text(total.toLocaleString('FR-fr')); // TODO: translate + pluralize
+    $('#count-events').text(total.toLocaleString('FR-fr') + ' ' + pluralize(total, __('insee.place_found'), __('insee.places_found')));
     $('#surname-name').text((form.surname.trim() + ' ' + form.name.trim()).trim());
 
     $('#statistics-content').removeClass('brighter');
