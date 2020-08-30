@@ -27,6 +27,13 @@ de la Principauté de Monaco](https://www.genealogiemonaco.org/liens-utiles/)
 - [Centre Généalogique de Loire-Atlantique, article du 20/03/2020](https://www.cgla44.fr/blog-du-cgla/260-base-des-deces-de-l-insee.html)
 - [Genea Lilas, post du 27/03/2020](https://sites.google.com/site/genealilas/infos/les-infos)
 - [Wikimanche, section ressources](https://www.wikimanche.fr/Aide:Ressources)
+- [Jojo Navajo, article du 08/05/2020](https://jojonavajo.jimdofree.com/genealogie-site/)
+- [Généaplus, article du 14/05/2020](http://www.geneaplus.com/?p=288)
+- [Association des jeunes généalogistes, ressources mai 2020](http://genjeune.free.fr/wp-content/uploads/2020/05/Ressources-et-outils-g%C3%A9n%C3%A9alogiques-utiles.pdf)
+- [Entraide généalogique du Midi Toulousain, lettre d'information juin 2020](https://egmt.fr/site/wp-content/uploads/2020/03/EGMT-antenne-Muret-lettre-d_information-n6-2020.pdf)
+- [Guide de généalogie, bases de personnes](http://www.guide-genealogie.com/guide/bases-de-personnes.html)
+- [Maitron, article du 05/06/2020](https://maitron.fr/spip.php?article228736)
+- [GenSoftReviews (EN), 02/08/2020](https://www.gensoftreviews.com/?p=2175&sel=&new=1&lic=&pla=&type=&sort=1035)
 - ...
 
 Merci (entre autres) à eux !
