@@ -323,6 +323,11 @@
     "for_the_names": "For the names",
     "all_times": "all times",
     "place_found": "place",
-    "places_found": "places"
+    "places_found": "places",
+
+    "tabs": {
+      "results": "Results",
+      "statistics": "Statistics"
+    }
   }
 }
