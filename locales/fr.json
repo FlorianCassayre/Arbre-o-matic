@@ -229,6 +229,7 @@
     "records": "fiches",
     "general_informations": "Informations générales",
     "informations": {
+      "disclaimer": "Ce service utilise les données fournies par l'INSEE mais n'est en aucun cas affilié à l'institut.",
       "introduction": "Principe",
       "introduction_body": "Afin de rechercher une fiche il vous faudra entrer au moins un nom de famille. Les autres champs servent à affiner les résultats mais ne sont pas requis.",
       "names": "Noms et prénoms",
@@ -244,8 +245,8 @@
     },
     "made_and_hosted_by": "Réalisé et hébergé par",
     "contact": "contact",
-    "made_with_the": "À partir des",
-    "data_from": "données de l'INSEE",
+    "not_affiliated": "Non affilié à l'INSEE",
+    "source_data": "source des données",
     "api": "API",
     "source_code_on": "Code source sur GitHub",
     "api_title": "Interface de programmation (API)",
@@ -292,7 +293,7 @@
     },
     "geographical_stats": "Statistiques géographiques",
     "geographical_stats_description": "Permet d'obtenir des statistiques géographiques pour une recherche.",
-    "time_stats": "Statistiques par annuelles",
+    "time_stats": "Statistiques annuelles",
     "time_stats_description": "Permet d'obtenir des statistiques par année pour une recherche.",
 
     "none_selected_text": "Lieu (commune, département, région ou pays)",

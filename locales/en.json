@@ -229,6 +229,7 @@
     "records": "records",
     "general_informations": "General informations",
     "informations": {
+      "disclaimer": "This service relies on data provided by INSEE but is not affiliated with the institution.",
       "introduction": "Principle",
       "introduction_body": "In order to search for a record you must enter at least one surname. The other fields may help you refine the results but are not required.",
       "names": "Names",
@@ -244,8 +245,8 @@
     },
     "made_and_hosted_by": "Designed and hosted by",
     "contact": "contact",
-    "made_with_the": "Using the",
-    "data_from": "data from INSEE",
+    "not_affiliated": "Not affiliated with INSEE",
+    "source_data": "source of the data",
     "api": "API",
     "source_code_on": "Source code on GitHub",
     "api_title": "Application programming interface (API)",
