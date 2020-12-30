@@ -53,9 +53,7 @@ export function updateResults() {
 function failureFallback(xhr, status, error) {
     console.log("Request error");
 
-    if(xhr.status === 503 && xhr.hasOwnProperty('responseJSON') && !errorFlag) { // An information should be displayed
-        errorFlag = true;
-
+    if(xhr.status === 503 && xhr.hasOwnProperty('responseJSON')) { // An information should be displayed
         const json = xhr.responseJSON;
 
         const modal = $('#server-message');
