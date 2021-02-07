@@ -11,6 +11,7 @@ _Outils et services généalogiques libres_
 - [La Revue française de Généalogie](https://www.rfgenealogie.com/)
     - ["Corse : les archives à consulter" (n°244), p. 58](https://www.rfgenealogie.com/le-magazine/244-corse-les-archives-a-consulter)
     - ["Les logiciels et applications Made in France" (n°247), p. 50](https://www.rfgenealogie.com/le-magazine/247-les-logiciels-et-applications-made-in-france)
+    - ["Mémoire des lieux" (n°248), p. 31](https://www.rfgenealogie.com/magazine/248)
 - [Cercle Généalogique Du Toulois](https://www.genealogiedutoulois.fr/)
     - [Article du 17/08/2019](https://www.genealogiedutoulois.fr/actualite-354-zoom-sur.html)
     - [Article du 11/02/2020](https://www.genealogiedutoulois.fr/actualite-380-fichiers-des-deces-de-linsee.html)
@@ -34,6 +35,10 @@ de la Principauté de Monaco](https://www.genealogiemonaco.org/liens-utiles/)
 - [Guide de généalogie, bases de personnes](http://www.guide-genealogie.com/guide/bases-de-personnes.html)
 - [Maitron, article du 05/06/2020](https://maitron.fr/spip.php?article228736)
 - [GenSoftReviews (EN), 02/08/2020](https://www.gensoftreviews.com/?p=2175&sel=&new=1&lic=&pla=&type=&sort=1035)
+- [Site personnel de Roland B., article comparatif du 21/10/2020](https://www.lorand.org/spip.php?article2640)
+- [Archives départementales de Haute-Pyrénées, article de janvier 2021](http://www.archivesenligne65.fr/article.php?laref=1946&titre=connaissez-vous-le-fichier-des-deces-de-l-insee-)
+- [Cercle de généalogie Juive](https://genealoj.org/)
+- [Association Entraide, bulletin n°225 de janvier 2021](http://www.entraideetloisirsussel.com/genealogie--infos-pratiques.html)
 - ...
 
 Merci (entre autres) à eux !
