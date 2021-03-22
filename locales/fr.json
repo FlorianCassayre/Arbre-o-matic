@@ -239,7 +239,7 @@
       "dates": "Dates et tri",
       "dates_body": "Enfin, il est aussi possible de rechercher grâce à une date précise ou un intervalle (ouvert ou fermé). Les données sont automatiquement triées en fonction de la date de l'événement sélectionné.",
       "warnings": "Mises en garde",
-      "warnings_body_1": "Cette base repose sur les données fournies par l'INSEE, celles-ci sont susceptible de contenir des trous ou des erreurs. Il n'est pas utile de signaler les éventuelles erreurs.",
+      "warnings_body_1": "Cette base repose sur les données fournies par l'INSEE, celles-ci sont susceptibles de contenir des trous ou des erreurs. Il n'est pas utile de signaler les éventuelles erreurs.",
       "warnings_body_2": "L'accentuation des prénoms n'est pas nécessairement correcte.",
       "warnings_body_3": "Certains lieux n'ont pas pu être récupérés et ne sont par conséquent pas affichés."
     },
